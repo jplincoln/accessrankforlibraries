@@ -75,7 +75,18 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* Cloth-bound book texture — Option D: anisotropic SVG turbulence
+     simulates directional bookcloth (Buckram) thread structure, plus
+     two faint age-mottling washes. Pure CSS / inline SVG — no image
+     files, no extra HTTP requests. */
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='2.5 0.4' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.17  0 0 0 0 0.16  0 0 0 0 0.15  0 0 0 0.13 0'/></filter><rect width='100%25' height='100%25' filter='url(%23w)'/></svg>"),
+    radial-gradient(ellipse 700px 500px at 30% 40%,
+      rgba(31, 78, 95, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 400px at 75% 80%,
+      rgba(120, 80, 50, 0.04) 0%, transparent 60%);
+  background-attachment: scroll, fixed, fixed;
   color: var(--text-soft);
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -1097,7 +1108,7 @@ h2 {
    ────────────────────────────────────────────────────────────────── */
 .stats-strip {
   padding: 44px 28px;
-  background: var(--surface-2);
+  background: var(--teal);
 }
 
 .stats-strip-inner {
@@ -1114,12 +1125,12 @@ h2 {
   font-size: 38px;
   font-weight: 800;
   letter-spacing: -1.5px;
-  color: var(--teal);
+  color: #FFFFFF;
   line-height: 1;
   margin-bottom: 6px;
 }
 
-.stat-label { font-size: 12px; color: var(--text-soft); }
+.stat-label { font-size: 12px; color: rgba(255, 255, 255, 0.75); }
 
 
 /* ──────────────────────────────────────────────────────────────────
