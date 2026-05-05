@@ -1,0 +1,1480 @@
+/* ==================================================================
+   ACCESSRANK FOR LIBRARIES — STYLES
+   ==================================================================
+   Sister site of Accessrank. Built for public libraries.
+   Palette: LIBRARY STONE (cool grey-taupe + deep teal accent)
+
+   Sections (Cmd/Ctrl+F to jump):
+     1. DESIGN TOKENS  — colors, type, spacing
+     2. RESET / BASE
+     3. NAV + MOBILE MENU
+     4. HERO
+     5. AUDIT CARD (live audit widget)
+     6. MARQUEE (scrolling library platform list)
+     7. STAKES STRIP ("Why this matters")
+     8. WCAG 2.2 EXPLAINER
+     9. OVERLAY WARNING
+    10. FEATURES ("How it works")
+    11. STATS STRIP
+    12. TESTIMONIAL (head librarian)
+    13. PRICING (tiered by collection size)
+    14. FOOTER
+    15. RESPONSIVE
+    16. SCROLL-TRIGGERED FADE-IN
+    17. LOGO MARK ANIMATION (3-state diagonal sweep)
+   ================================================================== */
+
+
+/* ──────────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS
+   ────────────────────────────────────────────────────────────────── */
+:root {
+  /* Brand colors */
+  --brand:           #FFD23F;   /* Brand yellow — logo, CTAs, accents (shared with main Accessrank) */
+  --brand-soft:      rgba(255, 210, 63, 0.18);
+  --brand-border:    rgba(255, 210, 63, 0.45);
+
+  /* Library Stone neutrals (the major change vs. main Accessrank) */
+  --bg:              #E5E0D6;   /* Page background — cool grey-taupe, like Carnegie library walls */
+  --surface:         #F1ECE2;   /* Cards, audit widget — slightly lighter than bg */
+  --surface-2:      #DCD6C9;    /* Subtle wells/strips */
+
+  /* Civic/institutional accent */
+  --teal:            #1F4E5F;   /* Deep teal — stakes accent, primary CTA, headline accents */
+  --teal-soft:       rgba(31, 78, 95, 0.10);
+  --teal-border:     rgba(31, 78, 95, 0.25);
+
+  /* Text on light surface */
+  --text:            #2C2A26;   /* Primary text */
+  --text-soft:       #5A554B;   /* Body copy */
+  --text-faint:      #8B8478;   /* Meta / captions */
+  --text-fainter:    #A89E8B;   /* Borders, dividers */
+
+  /* Semantic */
+  --warning-red:     #B5443A;   /* Earthy red, less neon than main site — for the warning icon only */
+
+  /* Hairlines on light bg need to be darker, not brighter */
+  --hairline:        rgba(44, 42, 38, 0.08);
+  --hairline-strong: rgba(44, 42, 38, 0.14);
+
+  /* Typography scales */
+  --h1-size:         48px;
+  --h2-size:         34px;
+  --body-size:       16px;
+
+  /* Easing */
+  --ease-out:        cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   2. RESET / BASE
+   ────────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text-soft);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+a { text-decoration: none; color: inherit; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+input { font-family: inherit; }
+
+img { max-width: 100%; display: block; }
+
+.container { max-width: 1180px; margin: 0 auto; }
+
+/* Visually hidden — for skip links and screen-reader-only labels */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   3. NAV + MOBILE MENU
+   ────────────────────────────────────────────────────────────────── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--hairline);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+/* "for Libraries" sub-brand qualifier in the lockup.
+   Fraunces italic in deep teal — gives the library variant its own
+   editorial voice while the parent "Accessrank" stays in Inter 800.
+   The 2px left margin is intentionally tight; italic letterforms
+   lean left and create their own visual breathing room. */
+.logo-suffix {
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--teal);
+  letter-spacing: -0.3px;
+  margin-left: -1px;
+  font-variation-settings: "opsz" 144;
+}
+
+.nav-right {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.nav-right a:not(.cta-nav) { color: var(--text-soft); }
+.nav-right a:not(.cta-nav):hover { color: var(--text); }
+
+.cta-nav {
+  background: var(--teal);
+  color: #FFFFFF;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 12px;
+  transition: opacity 0.15s ease;
+}
+.cta-nav:hover { opacity: 0.9; }
+
+/* Hamburger — hidden on desktop, shown on mobile */
+.hamburger {
+  display: none;
+  width: 36px; height: 36px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 8px;
+}
+.ham-line {
+  width: 16px; height: 2px;
+  background: var(--text);
+  transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+}
+.hamburger[aria-expanded="true"] .ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger[aria-expanded="true"] .ham-line:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] .ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+
+/* ──────────────────────────────────────────────────────────────────
+   4. HERO
+   ────────────────────────────────────────────────────────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 40px;
+  padding: 64px 28px 56px;
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--teal);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+
+.pulse-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.hero h1 {
+  font-size: var(--h1-size);
+  line-height: 1.02;
+  letter-spacing: -1.8px;
+  font-weight: 800;
+  margin: 0 0 22px;
+  color: var(--text);
+}
+
+.hero h1 .accent { color: var(--teal); }
+
+.sub {
+  font-size: var(--body-size);
+  line-height: 1.55;
+  color: var(--text-soft);
+  max-width: 460px;
+  margin: 0 0 22px;
+}
+
+.sub .highlight { color: var(--text); font-weight: 600; }
+
+.section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--teal-soft);
+  color: var(--teal);
+  border: 1px solid var(--teal-border);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  transition: background 0.15s ease;
+}
+.section-link:hover { background: rgba(31, 78, 95, 0.16); }
+
+.info-circle {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cta-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  background: #FFFFFF;
+  color: var(--teal);
+  padding: 13px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: opacity 0.15s ease;
+}
+.btn-primary:hover { opacity: 0.9; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  padding: 13px 22px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  border: 1px solid rgba(44, 42, 38, 0.25);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-secondary:hover {
+  background: rgba(44, 42, 38, 0.05);
+  border-color: rgba(44, 42, 38, 0.4);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   5. AUDIT CARD (live audit widget)
+   ────────────────────────────────────────────────────────────────── */
+.audit-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 22px;
+  border: 1px solid var(--hairline-strong);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.4) inset, 0 12px 28px rgba(44,42,38,0.06);
+}
+
+.audit-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.audit-title {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.audit-meta {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.url-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.url-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--hairline-strong);
+  color: var(--text);
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.url-input::placeholder { color: var(--text-fainter); }
+.url-input:focus { border-color: var(--teal); }
+
+.scan-btn {
+  background: var(--teal);
+  color: #FFFFFF;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.scan-status {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+  min-height: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scan-status.active { color: var(--teal); }
+
+.scan-spinner {
+  width: 10px; height: 10px;
+  border: 1.5px solid rgba(31, 78, 95, 0.3);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.audit-rows { display: flex; flex-direction: column; }
+
+.audit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+}
+.audit-row.visible { opacity: 1; transform: translateY(0); }
+.audit-row:last-child { border-bottom: none; }
+
+.check-circle {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.row-label { color: var(--text); flex: 1; }
+.row-meta  { color: var(--teal); font-size: 12px; font-weight: 600; }
+
+.empty-state {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.report-cta {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--text);
+  color: var(--surface);
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px;
+  width: 100%;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.report-cta:hover, .report-cta:focus-visible {
+  background: var(--brand);
+  color: var(--text);
+}
+.report-cta-sub {
+  display: block;
+  font-size: 11px;
+  color: rgba(241, 236, 226, 0.7);
+  margin-top: 3px;
+  font-weight: 400;
+}
+.report-cta:hover .report-cta-sub,
+.report-cta:focus-visible .report-cta-sub {
+  color: rgba(44, 42, 38, 0.7);
+}
+
+.check-anim {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: draw 0.6s var(--ease-out) forwards;
+}
+@keyframes draw { 0% { stroke-dashoffset: 16; } 60%, 100% { stroke-dashoffset: 0; } }
+
+
+/* ──────────────────────────────────────────────────────────────────
+   6. MARQUEE
+   Library platforms (Bibliocommons, Polaris, Sierra, OverDrive, Libby).
+   Quieter than the ecommerce site's blue gradient — uses the deep teal.
+   ────────────────────────────────────────────────────────────────── */
+.marquee {
+  background: var(--teal);
+  color: var(--brand);
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 56px;
+  animation: marquee 32s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.marquee-track .item {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 56px;
+}
+
+.marquee-track .sep {
+  color: rgba(255, 210, 63, 0.50);
+  font-size: 10px;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   7. STAKES STRIP ("Why this matters")
+   Reframed for libraries — federal funding, ADA Title II, not lawsuits.
+   ────────────────────────────────────────────────────────────────── */
+/* DARK PHOTO BAND
+   ────────────────────────────────────────────────────────────────────
+   Wraps hero + marquee + stakes-strip. The library photo runs as the
+   single background image for this whole section, from just below the
+   navbar down through the stat cards.
+
+   Photo treatment notes:
+     - Image is used AS-IS — no CSS overlay, no darken, no blend mode.
+     - The source file (library-bg.jpg) is already pre-edited to be
+       dark/moody enough to support white text on top.
+     - Place the file at the same level as index.html.
+     - background-size: cover keeps the photo filling the section at
+       any viewport width without distortion.
+     - background-attachment: scroll (no parallax) — simpler, faster,
+       avoids iOS rendering issues, and respects users with motion
+       sensitivities.
+*/
+.dark-photo-band {
+  background-color: #1A1411;                /* fallback while image loads */
+  background-image: url('library-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+
+/* Inside the dark band, .stakes-strip just controls padding + text alignment */
+.stakes-strip {
+  padding: 64px 28px 96px;
+  text-align: center;
+}
+
+/* Inner wrapper centers stakes content at the standard max-width */
+.stakes-strip-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   DARK PHOTO BAND — scoped readability overrides
+   ──────────────────────────────────────────────────────────────────
+   The hero, marquee, and stakes-strip all live inside .dark-photo-band.
+   Anything that was tuned for the light taupe page bg needs adjusting
+   to read on the dark photo. Each rule below scopes to .dark-photo-band
+   so it only applies inside the band — the rest of the page stays as-is.
+*/
+
+/* Hero eyebrow — was teal on taupe; now light teal on dark */
+.dark-photo-band .eyebrow {
+  color: #FFFFFF;                          /* white text on dark photo */
+}
+.dark-photo-band .pulse-dot {
+  background: #6FB8CC;                     /* keep teal accent dot */
+}
+
+/* Hero headline — white with brand-yellow accent */
+.dark-photo-band .hero h1 {
+  color: #FFFFFF;
+}
+.dark-photo-band .hero h1 .accent {
+  color: var(--brand);                     /* yellow pops on dark */
+}
+
+/* Hero sub copy — soft cream, easy to read on dark photo */
+.dark-photo-band .hero .sub {
+  color: #E8E2D5;
+}
+.dark-photo-band .hero .sub .highlight {
+  color: #FFFFFF;
+}
+
+/* WCAG link pill — needs more presence on dark bg */
+.dark-photo-band .section-link {
+  background: var(--teal);
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+.dark-photo-band .section-link:hover {
+  background: rgba(31, 78, 95, 0.85);
+}
+
+/* Hero buttons — primary teal stays, secondary needs lighter outline */
+.dark-photo-band .btn-secondary {
+  background: var(--teal);
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+}
+.dark-photo-band .btn-secondary:hover {
+  background: rgba(31, 78, 95, 0.85);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* Audit card — drop more shadow so it lifts off the photo */
+.dark-photo-band .audit-card {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+/* Stakes section — headline white, "everyone" yellow accent */
+.dark-photo-band .stakes-title {
+  color: #FFFFFF;
+}
+.dark-photo-band .stakes-title .accent {
+  color: var(--brand);
+}
+
+/* Stat cards on dark photo — clean light surface, stronger shadow */
+.dark-photo-band .stakes-card {
+  background: rgba(241, 236, 226, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+
+/* The marquee already has its own teal background, no change needed */
+
+/* Section labels — small "WHY THIS MATTERS" / "WCAG 2.2 EXPLAINED" chips.
+   Rendered as inline-block yellow pills with dark text inside, NOT as
+   raw yellow text (which fails contrast on the taupe background).
+   The wrapping div is centered with text-align:center on the parent. */
+.stakes-eyebrow,
+.section-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #FFFFFF;                    /* white text */
+  background: var(--teal);           /* dark teal chip */
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 14px;
+}
+
+/* Stakes eyebrow lives on the dark photo band — flip to yellow chip
+   with dark teal text for a brighter, higher-contrast accent there. */
+.stakes-eyebrow {
+  color: var(--teal);
+  background: var(--brand);
+}
+
+/* Container that centers the chip on its line */
+.stakes-strip,
+.wcag-section,
+.features,
+.testimonial,
+.pricing {
+  text-align: center;
+}
+
+/* But reset text-align on children that need to be left-aligned */
+.stakes-strip .stakes-grid,
+.wcag-section .wcag-grid,
+.features .feature-grid,
+.testimonial .quote-card,
+.pricing .pricing-grid {
+  text-align: left;
+}
+
+.stakes-title {
+  font-size: var(--h2-size);
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  font-weight: 800;
+  margin: 0 auto 36px;
+  color: #FFFFFF;                          /* light text on dark photo */
+  text-align: center;
+  max-width: 660px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);  /* a hair of legibility insurance */
+}
+
+.stakes-title .accent { color: var(--brand); }   /* yellow accent pops on the dark photo */
+
+.stakes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.stakes-card {
+  padding: 24px;
+  background: rgba(241, 236, 226, 0.96);   /* near-opaque light surface, slight transparency picks up photo warmth */
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);              /* progressive enhancement — frosts the photo behind */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  text-align: left;
+}
+
+.stakes-num {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stakes-num .small { font-size: 18px; color: var(--text-faint); font-weight: 500; }
+
+.stakes-label {
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.stakes-source {
+  font-size: 10px;
+  color: var(--text-faint);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   8. WCAG 2.2 EXPLAINER
+   ────────────────────────────────────────────────────────────────── */
+.wcag-section {
+  padding: 72px 28px 36px;
+  max-width: 1180px;
+  margin: 0 auto;
+  border-top: 1px solid var(--hairline);
+}
+
+h2 {
+  font-size: var(--h2-size);
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+  font-weight: 800;
+  margin: 0 0 14px;
+  color: var(--text);
+  text-align: center;
+}
+
+.section-sub {
+  font-size: 15px;
+  color: var(--text-soft);
+  text-align: center;
+  max-width: 540px;
+  margin: 0 auto 40px;
+  line-height: 1.55;
+}
+
+.wcag-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: start;
+}
+
+.wcag-lede {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-soft);
+  margin: 0 0 24px;
+}
+.wcag-lede strong { color: var(--text); font-weight: 600; }
+
+.pour {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pour-item {
+  padding: 14px 16px;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+}
+
+.pour-letter {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--teal);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pour-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.pour-desc {
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.4;
+}
+
+.wcag-meta-row {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--brand-soft);
+  border: 1px solid var(--brand-border);
+  border-radius: 10px;
+}
+
+.icon-box {
+  width: 28px; height: 28px;
+  background: var(--brand);
+  color: var(--text);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.wcag-meta-text { font-size: 12px; color: var(--text); line-height: 1.4; }
+.wcag-meta-text strong { color: var(--text); font-weight: 700; }
+
+.criteria-list { display: flex; flex-direction: column; gap: 8px; }
+
+.criteria-head {
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.criteria-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 70px;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  align-items: center;
+}
+
+.criteria-id {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.criteria-body { font-size: 13px; color: var(--text); line-height: 1.4; }
+.criteria-body .desc { display: block; font-size: 11px; color: var(--text-faint); margin-top: 2px; font-weight: 400; }
+
+.criteria-freq {
+  font-size: 12px;
+  color: var(--warning-red);
+  font-weight: 700;
+  text-align: right;
+}
+.criteria-freq .small {
+  font-size: 9px;
+  color: var(--text-fainter);
+  display: block;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   8b. COMPLIANCE FRAMEWORKS
+   Three-up reference card: ADA Title II, Section 508, WCAG 2.2.
+   Same column structure as features grid for visual consistency.
+   ────────────────────────────────────────────────────────────────── */
+.frameworks {
+  padding: 36px 28px 72px;
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.frameworks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.framework-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section 508 is the middle/featured card — slightly stronger border to anchor it */
+.framework-card-featured {
+  border: 2px solid var(--teal);
+  padding: 27px;                     /* compensate for 1px-thicker border */
+}
+
+.framework-tag {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.framework-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--text);
+  margin: 0 0 10px;
+}
+
+.framework-applies {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.framework-applies strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.framework-body {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.55;
+  margin: 0 0 18px;
+  flex-grow: 1;                      /* pushes the target chip to the bottom */
+}
+
+/* "Target standard" chip at the bottom of each card */
+.framework-target {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--teal-soft);
+  border: 1px solid var(--teal-border);
+  border-radius: 8px;
+}
+.framework-target-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--text-faint);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.framework-target-value {
+  font-size: 13px;
+  color: var(--teal);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.frameworks-footnote {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.55;
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  background: var(--brand-soft);
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+}
+.frameworks-footnote strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   9. OVERLAY WARNING (caution-tape strip — adapted for taupe bg)
+   ────────────────────────────────────────────────────────────────── */
+.overlay-warning {
+  padding: 40px 28px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #D8CFBE 0 24px,
+      #CEC4B0 24px 48px
+    );
+  border-top: 2px solid var(--brand);
+  border-bottom: 2px solid var(--brand);
+}
+
+.overlay-card {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.overlay-icon {
+  width: 36px; height: 36px;
+  background: var(--warning-red);
+  color: #FFFFFF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.overlay-content h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.overlay-content p {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.overlay-content p strong {
+  color: var(--text);
+  font-weight: 700;
+  background: rgba(255, 210, 63, 0.35);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   10. FEATURES ("How it works")
+   ────────────────────────────────────────────────────────────────── */
+.features {
+  padding: 72px 28px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--hairline);
+}
+
+.feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--teal-soft);
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.feature-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.feature-desc {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   11. STATS STRIP
+   ────────────────────────────────────────────────────────────────── */
+.stats-strip {
+  padding: 44px 28px;
+  background: var(--surface-2);
+}
+
+.stats-strip-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;                        /* matches .feature-grid */
+}
+
+.stat { text-align: center; }
+
+.stat-num {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: var(--teal);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-label { font-size: 12px; color: var(--text-soft); }
+
+
+/* ──────────────────────────────────────────────────────────────────
+   12. TESTIMONIAL
+   ────────────────────────────────────────────────────────────────── */
+.testimonial {
+  padding: 72px 28px 36px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.accent-teal { color: var(--teal); }
+.accent-brand { color: var(--brand); background: var(--text); padding: 0 6px; border-radius: 4px; }
+
+.quote-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 36px;
+  border: 1px solid var(--hairline);
+  max-width: 600px;
+  margin: 36px auto 0;     /* extra standoff above the quote box */
+  position: relative;
+}
+
+/* Pull the testimonial headline a bit further from the quote card below it */
+.testimonial h2 {
+  margin-bottom: 28px;
+}
+
+.quote-mark {
+  position: absolute;
+  top: 14px; left: 22px;
+  font-size: 60px;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1;
+  color: var(--teal);
+  opacity: 0.2;
+}
+
+.quote-text {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  margin: 0 0 22px;
+  position: relative;
+}
+
+.quote-text .y { color: var(--teal); font-weight: 700; }
+
+.quote-attr {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.quote-name { font-size: 13px; color: var(--text); font-weight: 600; }
+.quote-role { font-size: 12px; color: var(--text-faint); }
+
+
+/* ──────────────────────────────────────────────────────────────────
+   13. PRICING (tiered by collection size)
+   ────────────────────────────────────────────────────────────────── */
+.pricing {
+  padding: 36px 28px 72px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.price-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 26px;
+  border: 1px solid var(--hairline);
+}
+
+.price-card.featured { border: 2px solid var(--teal); position: relative; }
+
+.price-tier {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-faint);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.price-tier.featured-tier { color: var(--teal); }
+
+.price-amount {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.price-amount .per { font-size: 13px; color: var(--text-faint); font-weight: 400; }
+
+.price-desc {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.price-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+}
+
+.price-features li {
+  font-size: 12px;
+  color: var(--text-soft);
+  padding: 5px 0 5px 20px;
+  position: relative;
+  line-height: 1.4;
+}
+.price-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.price-cta {
+  background: transparent;
+  color: var(--text);
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  border: 1px solid rgba(44, 42, 38, 0.25);
+  width: 100%;
+  transition: background 0.15s ease;
+}
+.price-cta:hover { background: rgba(44, 42, 38, 0.05); }
+
+.price-cta.featured-cta {
+  background: var(--teal);
+  color: #FFFFFF;
+  border: none;
+}
+.price-cta.featured-cta:hover { background: var(--teal); opacity: 0.9; }
+
+
+/* ──────────────────────────────────────────────────────────────────
+   14. FOOTER
+   ────────────────────────────────────────────────────────────────── */
+.footer {
+  padding: 40px 28px 28px;
+  border-top: 1px solid var(--hairline);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  gap: 36px;
+}
+
+.footer-cols {
+  display: flex;
+  gap: 44px;
+  font-size: 12px;
+}
+
+.footer-col h4 {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-faint);
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.footer-col a {
+  display: block;
+  color: var(--text-soft);
+  padding: 4px 0;
+}
+.footer-col a:hover { color: var(--text); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   15. RESPONSIVE
+   ────────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  :root { --h1-size: 36px; --h2-size: 26px; }
+
+  .hero { grid-template-columns: 1fr; gap: 32px; padding: 36px 20px 24px; }
+  .hero h1 { letter-spacing: -1px; }
+
+  .nav-right { display: none; }
+  .hamburger { display: flex; }
+  .nav { position: relative; }
+
+  .stakes-strip, .wcag-section, .frameworks, .features, .testimonial, .pricing, .footer {
+    padding-left: 20px; padding-right: 20px;
+  }
+
+  .stakes-grid { grid-template-columns: repeat(2, 1fr); }
+  .wcag-grid { grid-template-columns: 1fr; gap: 32px; }
+  .feature-grid, .pricing-grid, .frameworks-grid { grid-template-columns: 1fr; }
+  .stats-strip { grid-template-columns: 1fr; padding: 32px 20px; }
+  .footer-top { flex-direction: column; gap: 28px; }
+  .footer-cols { gap: 28px; flex-wrap: wrap; }
+}
+
+@media (max-width: 520px) {
+  .stakes-grid { grid-template-columns: 1fr; }
+  .pour { grid-template-columns: 1fr; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   16. SCROLL-TRIGGERED FADE-IN
+   Elements with data-animate slide-fade up when they enter the viewport.
+   The .in-view class is added by the IntersectionObserver in script.js.
+   ────────────────────────────────────────────────────────────────── */
+body.animations-ready [data-animate] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+
+body.animations-ready [data-animate].in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.animations-ready [data-animate] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
+   17. LOGO MARK ANIMATION
+   Same 3-state diagonal sweep as main Accessrank.
+   Yellow ✓ → Red ! → Green ✓ (with stamp pulse) → Yellow ✓ (rests).
+   Plays once on load over 5s.
+   ────────────────────────────────────────────────────────────────── */
+.logo-mark {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--brand);
+  flex-shrink: 0;
+}
+
+.logo-mark .layer { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.logo-mark .layer-red    { background: #E0432B; transform: translate(-110%, 110%); animation: arLogoWipeRed 5s ease-in-out 1 forwards; }
+.logo-mark .layer-green  { background: #4ADE80; transform: translate(110%, -110%); animation: arLogoWipeGreen 5s ease-in-out 1 forwards; }
+.logo-mark .layer-yellow { background: var(--brand); transform: translate(-110%, 110%); animation: arLogoWipeYellowReturn 5s ease-in-out 1 forwards; }
+
+.logo-mark .icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 2; pointer-events: none; }
+.logo-mark .icon svg { width: 58%; height: 58%; display: block; }
+.logo-mark .icon-yellow { animation: arLogoIconYellow 5s ease-in-out 1 forwards; }
+.logo-mark .icon-red    { opacity: 0; animation: arLogoIconRed   5s ease-in-out 1 forwards; }
+.logo-mark .icon-green  { opacity: 0; animation: arLogoIconGreen 5s ease-in-out 1 forwards; transform-origin: 50% 50%; }
+
+.logo-mark .swipe { position: absolute; top: -50%; left: -150%; width: 200%; height: 200%; pointer-events: none; z-index: 4; filter: blur(0.5px); opacity: 0; }
+.logo-mark .swipe-1, .logo-mark .swipe-3 { background: linear-gradient(45deg,  transparent 45%, rgba(255, 255, 255, 0.85) 50%, transparent 55%); }
+.logo-mark .swipe-2 { background: linear-gradient(-45deg, transparent 45%, rgba(255, 255, 255, 0.85) 50%, transparent 55%); }
+.logo-mark .swipe-1 { animation: arLogoSwipe1 5s ease-in-out 1 forwards; }
+.logo-mark .swipe-2 { animation: arLogoSwipe2 5s ease-in-out 1 forwards; }
+.logo-mark .swipe-3 { animation: arLogoSwipe3 5s ease-in-out 1 forwards; }
+
+@keyframes arLogoWipeRed {
+  0%, 13%   { transform: translate(-110%, 110%); }
+  22%, 40%  { transform: translate(0, 0); }
+  48%, 100% { transform: translate(110%, -110%); }
+}
+@keyframes arLogoWipeGreen {
+  0%, 38%   { transform: translate(110%, -110%); }
+  47%, 70%  { transform: translate(0, 0); }
+  77%, 100% { transform: translate(-110%, 110%); }
+}
+@keyframes arLogoWipeYellowReturn {
+  0%, 68%   { transform: translate(-110%, 110%); }
+  77%, 100% { transform: translate(0, 0); }
+}
+@keyframes arLogoIconYellow {
+  0%, 18%   { opacity: 1; }
+  22%, 72%  { opacity: 0; }
+  82%, 100% { opacity: 1; }
+}
+@keyframes arLogoIconRed {
+  0%, 18%   { opacity: 0; }
+  25%, 38%  { opacity: 1; }
+  44%, 100% { opacity: 0; }
+}
+@keyframes arLogoIconGreen {
+  0%, 43%   { opacity: 0; transform: scale(1); }
+  50%       { opacity: 1; transform: scale(1); }
+  56%       { opacity: 1; transform: scale(1); }
+  63%       { opacity: 1; transform: scale(1.42); }
+  68%       { opacity: 1; transform: scale(0.96); }
+  72%       { opacity: 1; transform: scale(1); }
+  78%, 100% { opacity: 0; transform: scale(1); }
+}
+@keyframes arLogoSwipe1 {
+  0%, 11%   { transform: translate(-50%, 50%);  opacity: 0; }
+  13%       { transform: translate(-50%, 50%);  opacity: 1; }
+  21%       { transform: translate(50%, -50%);  opacity: 1; }
+  23%, 100% { opacity: 0; }
+}
+@keyframes arLogoSwipe2 {
+  0%, 38%   { transform: translate(50%, -50%);  opacity: 0; }
+  40%       { transform: translate(50%, -50%);  opacity: 1; }
+  46%       { transform: translate(-50%, 50%);  opacity: 1; }
+  48%, 100% { opacity: 0; }
+}
+@keyframes arLogoSwipe3 {
+  0%, 68%   { transform: translate(-50%, 50%);  opacity: 0; }
+  70%       { transform: translate(-50%, 50%);  opacity: 1; }
+  76%       { transform: translate(50%, -50%);  opacity: 1; }
+  78%, 100% { opacity: 0; }
+}
