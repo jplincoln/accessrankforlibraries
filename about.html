@@ -67,6 +67,35 @@
       color: var(--teal);
     }
 
+    /* Centered logo finale — closes the origin story.
+       Lives on its own line below "...led to…", scaled larger than nav for impact. */
+    .about-hero .logo-finale {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 30px;
+      letter-spacing: -0.6px;
+      color: var(--text);
+      margin: 28px auto 0;
+      padding-top: 8px;
+    }
+    .about-hero .logo-finale .logo-mark {
+      width: 40px; height: 40px;
+      border-radius: 9px;
+      flex-shrink: 0;
+    }
+    .about-hero .logo-finale .logo-suffix {
+      margin-left: -2px;
+    }
+
+    /* Mobile: pull the finale slightly tighter so it doesn't dominate */
+    @media (max-width: 600px) {
+      .about-hero .logo-finale { font-size: 24px; gap: 10px; }
+      .about-hero .logo-finale .logo-mark { width: 34px; height: 34px; }
+    }
+
     /* === Section heads === */
     .about-section {
       max-width: 1180px;
@@ -391,8 +420,28 @@
       ADA-compliant websites also rank higher than non-compliant ones. Which makes sense: if a page is fully readable by a blind patron using assistive software, Google and AI searches can read it too. <strong>Access and ranking go together.</strong>
     </p>
     <p class="lead lead-emphasis">
-      That was the aha moment that led to <span class="accent">Accessrank.</span>
+      That was the aha moment that led to&hellip;
     </p>
+    <div class="logo logo-finale" aria-label="Accessrank for Libraries">
+      <span class="logo-mark" aria-hidden="true">
+        <span class="layer layer-red"></span>
+        <span class="layer layer-green"></span>
+        <span class="layer layer-yellow"></span>
+        <span class="icon icon-yellow">
+          <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="icon icon-red">
+          <svg viewBox="0 0 14 14"><path d="M5.4 3 L8.6 3 L7.8 9 L6.2 9 Z" fill="#FFFFFF"/><circle cx="7" cy="11.4" r="1.6" fill="#FFFFFF"/></svg>
+        </span>
+        <span class="icon icon-green">
+          <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="swipe swipe-1"></span>
+        <span class="swipe swipe-2"></span>
+        <span class="swipe swipe-3"></span>
+      </span>
+      Accessrank <span class="logo-suffix">for Libraries</span>
+    </div>
   </section>
 
   <!-- ============================================================== -->
