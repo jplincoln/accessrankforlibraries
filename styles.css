@@ -1245,7 +1245,7 @@ h2 {
   line-height: 1;
   margin-bottom: 4px;
 }
-.price-amount .per { font-size: 13px; color: var(--text-faint); font-weight: 400; }
+.price-amount .per { font-size: 13px; color: var(--text-faint); font-weight: 400; margin-left: 5px; }
 
 .price-desc {
   font-size: 12px;
