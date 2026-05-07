@@ -885,6 +885,131 @@ h2 {
 
 
 /* ──────────────────────────────────────────────────────────────────
+   8a. SEO / AI SEARCH — discovery services
+   Light variant of the parent site's seo-strip pattern.
+   Cream surface with teal accents instead of dark + yellow.
+   ────────────────────────────────────────────────────────────────── */
+.seo-strip {
+  padding: 36px 28px 72px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.seo-eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--teal);
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.seo-title {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  font-weight: 800;
+  margin: 0 auto 18px;
+  color: var(--text);
+  text-align: center;
+  max-width: 760px;
+}
+
+.seo-title .accent { color: var(--teal); }
+
+.seo-sub {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-soft);
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
+
+.seo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto 36px;
+}
+
+.seo-card {
+  padding: 26px 24px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--text-fainter);
+  display: flex;
+  flex-direction: column;
+}
+
+.seo-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--teal-soft);
+  border: 1px solid rgba(31, 78, 95, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.seo-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.seo-card-body {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-soft);
+  margin: 0 0 14px;
+  flex: 1;
+}
+
+.seo-card-tier {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 500;
+  padding-top: 12px;
+  border-top: 1px solid var(--text-fainter);
+}
+
+.seo-card-tier .tier-label { color: var(--teal); }
+
+.seo-closer {
+  text-align: center;
+  font-weight: 700;
+  font-size: 36px;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+  color: var(--text);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.seo-closer .dark { color: var(--text); }
+.seo-closer .teal { color: var(--teal); }
+
+@media (max-width: 768px) {
+  .seo-grid { grid-template-columns: 1fr; }
+  .seo-title { font-size: 30px; }
+  .seo-closer { font-size: 26px; }
+  .seo-strip { padding: 32px 20px 56px; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────────
    8b. COMPLIANCE FRAMEWORKS
    Three-up reference card: ADA Title II, Section 508, WCAG 2.2.
    Same column structure as features grid for visual consistency.
