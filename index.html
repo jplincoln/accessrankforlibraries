@@ -3,1704 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accessrank — WCAG 2.2 Accessibility Audits for DTC Ecommerce</title>
-  <meta name="description" content="Accessrank fixes WCAG 2.2 accessibility violations at the source code level — protecting DTC stores from ADA litigation and boosting SEO rankings." />
-  <meta property="og:title" content="Accessrank — Higher rank. Wider reach." />
-  <meta property="og:description" content="We make predatory lawyers look elsewhere — and give your SEO and AI rankings the boost they need for your business to thrive." />
-  <meta property="og:type" content="website" />
+  <title>Accessrank for Libraries — ADA-compliant catalogs, e-resources, and event pages</title>
+  <meta name="description" content="WCAG 2.2 AA compliance for public library websites. Built for Bibliocommons, Polaris, Sierra, OverDrive, Libby, and custom catalogs. Continuous monitoring + source-code remediation." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
 
-  <style>
-/* ==================================================================
-   ACCESSRANK — STYLES
-   ==================================================================
-   Sections (Cmd/Ctrl+F to jump):
-     1. DESIGN TOKENS  — colors, type, spacing variables
-     2. RESET / BASE
-     3. NAV + MOBILE MENU
-     4. HERO
-     5. AUDIT CARD (live audit widget)
-     6. MARQUEE (scrolling platform list)
-     7. RISK STRIP ("The stakes")
-     8. WCAG 2.2 EXPLAINER
-     9. OVERLAY WARNING
-    10. FEATURES ("How it works")
-    11. STATS STRIP
-    12. TESTIMONIAL
-    13. PRICING
-    14. FOOTER
-    15. RESPONSIVE
-    16. SCROLL-TRIGGERED FADE-IN
-   ================================================================== */
-
-
-/* ==================================================================
-   1. DESIGN TOKENS
-   ================================================================== */
-:root {
-  --brand:           #FFD23F;
-  --brand-soft:      rgba(255, 210, 63, 0.12);
-  --brand-border:    rgba(255, 210, 63, 0.30);
-  --warning:         #FF6B47;
-  --warning-soft:    #FF8B6E;
-  --stakes-accent:   #3B82F6;
-
-  --bg:              #0E0E10;
-  --surface:         #1A1A1D;
-  --text:            #FFFFFF;
-  --text-soft:       #D4D0C5;
-  --text-muted:      #B5B0A4;
-  --text-faint:      #9A9590;
-  --text-fainter:    #6B6760;
-  --hairline:        rgba(240, 237, 229, 0.14);
-  --hairline-strong: rgba(240, 237, 229, 0.18);
-
-  --h1-size:         48px;
-  --h2-size:         36px;
-  --body-size:       16px;
-  --caption-size:    11px;
-
-  --ease-out:        cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-
-/* ==================================================================
-   2. RESET / BASE
-   ================================================================== */
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text-soft);
-  margin: 0;
-  border-radius: 12px;
-  overflow-x: hidden;
-  position: relative;
-  isolation: isolate;
-}
-
-/* ──────────────────────────────────────────────────────────────────
-   ANIMATED GRADIENT BACKGROUND LAYERS
-   Two pseudo-elements layered behind all page content. Each holds
-   multiple radial-gradient "blobs" that drift slowly on independent
-   timing cycles. Six blobs total, distributed across upper and lower
-   halves, including a dark red accent that ties to the warning red
-   used elsewhere on the site.
-   Honors prefers-reduced-motion (real WCAG 2.2 concern).
-   ────────────────────────────────────────────────────────────────── */
-body::before,
-body::after {
-  content: '';
-  position: fixed;
-  inset: -10%;
-  pointer-events: none;
-  z-index: -1;
-}
-
-body::before {
-  background:
-    /* Center-left navy */
-    radial-gradient(800px circle at 30% 30%,
-      rgba(28, 50, 100, 0.55) 0%,
-      rgba(28, 50, 100, 0) 55%),
-    /* Center-right red — primary red presence */
-    radial-gradient(700px circle at 70% 65%,
-      rgba(110, 30, 35, 0.50) 0%,
-      rgba(110, 30, 35, 0) 60%),
-    /* Upper-right teal */
-    radial-gradient(600px circle at 75% 25%,
-      rgba(20, 70, 90, 0.40) 0%,
-      rgba(20, 70, 90, 0) 60%);
-  animation: blob-drift-1 18s ease-in-out infinite alternate;
-}
-
-body::after {
-  background:
-    /* Lower-center red — secondary red presence */
-    radial-gradient(750px circle at 45% 80%,
-      rgba(90, 28, 35, 0.42) 0%,
-      rgba(90, 28, 35, 0) 60%),
-    /* Lower-right eggplant */
-    radial-gradient(700px circle at 85% 90%,
-      rgba(60, 22, 70, 0.45) 0%,
-      rgba(60, 22, 70, 0) 60%),
-    /* Mid-left slate-blue */
-    radial-gradient(600px circle at 20% 55%,
-      rgba(40, 50, 90, 0.40) 0%,
-      rgba(40, 50, 90, 0) 60%);
-  animation: blob-drift-2 22s ease-in-out infinite alternate;
-}
-
-@keyframes blob-drift-1 {
-  0%   { transform: translate(-15%, -10%) scale(1);    }
-  50%  { transform: translate(20%, 12%)   scale(1.15); }
-  100% { transform: translate(-8%, 18%)   scale(0.95); }
-}
-
-@keyframes blob-drift-2 {
-  0%   { transform: translate(15%, 10%)   scale(1);    }
-  33%  { transform: translate(-22%, -8%)  scale(1.12); }
-  66%  { transform: translate(18%, 15%)   scale(0.95); }
-  100% { transform: translate(-12%, -15%) scale(1.08); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before,
-  body::after { animation: none; }
-}
-
-a { text-decoration: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: transparent; }
-button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
-
-
-/* ==================================================================
-   3. NAV + MOBILE MENU
-   ================================================================== */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 28px;
-  border-bottom: 1px solid var(--hairline-strong);
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 800;
-  font-size: 19px;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-/* ==================================================================
-   LOGO MARK ANIMATION
-   ================================================================== */
-.logo-mark {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  background: var(--brand);
-  flex-shrink: 0;
-}
-
-.logo-mark .layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-.logo-mark .layer-red {
-  background: #E0432B;
-  transform: translate(-110%, 110%);
-  animation: logoWipeRed 5s ease-in-out 1 forwards;
-}
-.logo-mark .layer-green {
-  background: #4ADE80;
-  transform: translate(110%, -110%);
-  animation: logoWipeGreen 5s ease-in-out 1 forwards;
-}
-.logo-mark .layer-yellow {
-  background: var(--brand);
-  transform: translate(-110%, 110%);
-  animation: logoWipeYellowReturn 5s ease-in-out 1 forwards;
-}
-
-.logo-mark .icon {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  pointer-events: none;
-}
-.logo-mark .icon svg {
-  width: 58%;
-  height: 58%;
-  display: block;
-}
-.logo-mark .icon-yellow { animation: logoIconYellow 5s ease-in-out 1 forwards; }
-.logo-mark .icon-red    { opacity: 0; animation: logoIconRed   5s ease-in-out 1 forwards; }
-.logo-mark .icon-green  { opacity: 0; animation: logoIconGreen 5s ease-in-out 1 forwards; transform-origin: 50% 50%; }
-
-.logo-mark .swipe {
-  position: absolute;
-  top: -50%; left: -150%;
-  width: 200%; height: 200%;
-  pointer-events: none;
-  z-index: 4;
-  filter: blur(0.5px);
-  opacity: 0;
-}
-.logo-mark .swipe-1,
-.logo-mark .swipe-3 {
-  background: linear-gradient(45deg,  transparent 45%, rgba(255,255,255,0.85) 50%, transparent 55%);
-}
-.logo-mark .swipe-2 {
-  background: linear-gradient(-45deg, transparent 45%, rgba(255,255,255,0.85) 50%, transparent 55%);
-}
-.logo-mark .swipe-1 { animation: logoSwipe1 5s ease-in-out 1 forwards; }
-.logo-mark .swipe-2 { animation: logoSwipe2 5s ease-in-out 1 forwards; }
-.logo-mark .swipe-3 { animation: logoSwipe3 5s ease-in-out 1 forwards; }
-
-@keyframes logoWipeRed {
-  0%, 13%   { transform: translate(-110%, 110%); }
-  22%, 40%  { transform: translate(0, 0); }
-  48%, 100% { transform: translate(110%, -110%); }
-}
-@keyframes logoWipeGreen {
-  0%, 38%   { transform: translate(110%, -110%); }
-  47%, 70%  { transform: translate(0, 0); }
-  77%, 100% { transform: translate(-110%, 110%); }
-}
-@keyframes logoWipeYellowReturn {
-  0%, 68%   { transform: translate(-110%, 110%); }
-  77%, 100% { transform: translate(0, 0); }
-}
-@keyframes logoIconYellow {
-  0%, 18%   { opacity: 1; }
-  22%, 72%  { opacity: 0; }
-  82%, 100% { opacity: 1; }
-}
-@keyframes logoIconRed {
-  0%, 18%   { opacity: 0; }
-  25%, 38%  { opacity: 1; }
-  44%, 100% { opacity: 0; }
-}
-@keyframes logoIconGreen {
-  0%, 43%   { opacity: 0; transform: scale(1); }
-  50%       { opacity: 1; transform: scale(1); }
-  56%       { opacity: 1; transform: scale(1); }
-  63%       { opacity: 1; transform: scale(1.42); }
-  68%       { opacity: 1; transform: scale(0.96); }
-  72%       { opacity: 1; transform: scale(1); }
-  78%, 100% { opacity: 0; transform: scale(1); }
-}
-@keyframes logoSwipe1 {
-  0%, 11%   { transform: translate(-50%, 50%);  opacity: 0; }
-  13%       { transform: translate(-50%, 50%);  opacity: 1; }
-  21%       { transform: translate(50%, -50%);  opacity: 1; }
-  23%, 100% { opacity: 0; }
-}
-@keyframes logoSwipe2 {
-  0%, 38%   { transform: translate(50%, -50%);  opacity: 0; }
-  40%       { transform: translate(50%, -50%);  opacity: 1; }
-  46%       { transform: translate(-50%, 50%);  opacity: 1; }
-  48%, 100% { opacity: 0; }
-}
-@keyframes logoSwipe3 {
-  0%, 68%   { transform: translate(-50%, 50%);  opacity: 0; }
-  70%       { transform: translate(-50%, 50%);  opacity: 1; }
-  76%       { transform: translate(50%, -50%);  opacity: 1; }
-  78%, 100% { opacity: 0; }
-}
-
-.nav-right {
-  display: flex;
-  gap: 22px;
-  align-items: center;
-  font-size: 13px;
-}
-
-.nav-right a:not(.cta-nav) {
-  color: var(--text-soft);
-  transition: color 0.15s;
-}
-
-.nav-right a:not(.cta-nav):hover { color: var(--text); }
-
-.cta-nav {
-  background: var(--brand);
-  color: var(--bg);
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 12px;
-  transition: opacity 0.15s ease;
-}
-
-.cta-nav:hover { opacity: 0.85; }
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px;
-}
-
-.ham-line {
-  width: 22px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 2px;
-  transition: transform 0.2s, opacity 0.2s;
-}
-
-.hamburger[aria-expanded="true"] .ham-line:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
-}
-.hamburger[aria-expanded="true"] .ham-line:nth-child(2) { opacity: 0; }
-.hamburger[aria-expanded="true"] .ham-line:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
-}
-
-.mobile-menu {
-  display: none;
-  flex-direction: column;
-  gap: 0;
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border-bottom: 1px solid var(--hairline-strong);
-  padding: 16px 28px;
-  z-index: 100;
-}
-
-.mobile-menu.open { display: flex; }
-
-.mobile-menu a {
-  color: var(--text-soft);
-  padding: 14px 0;
-  border-bottom: 1px solid var(--hairline);
-  font-size: 15px;
-}
-
-.mobile-menu a:last-child { border-bottom: none; }
-
-.mobile-menu .cta-mobile {
-  background: var(--brand);
-  color: var(--bg);
-  margin-top: 12px;
-  padding: 14px !important;
-  text-align: center;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-
-/* ==================================================================
-   4. HERO
-   ================================================================== */
-.hero {
-  display: grid;
-  grid-template-columns: 0.75fr 1fr;
-  gap: 18px;
-  padding: 56px 28px 36px;
-  align-items: center;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--caption-size);
-  letter-spacing: 3px;
-  color: var(--brand);
-  font-weight: 500;
-  margin-bottom: 22px;
-}
-
-.pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--brand);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.3; }
-}
-
-.hero h1 {
-  font-size: var(--h1-size);
-  line-height: 1.02;
-  letter-spacing: -2px;
-  font-weight: 800;
-  margin: 0 0 22px;
-  color: var(--text);
-}
-
-.hero h1 .accent { color: var(--brand); }
-
-.sub {
-  font-size: var(--body-size);
-  line-height: 1.55;
-  color: var(--text-soft);
-  max-width: 440px;
-  margin: 0 0 22px;
-}
-
-.sub .highlight {
-  color: var(--text);
-  font-weight: 500;
-}
-
-.wcag-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--brand-soft);
-  color: #FFFFFF;
-  border: 1px solid var(--brand-border);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 24px;
-  transition: background 0.2s;
-}
-
-.wcag-link:hover { background: rgba(255, 210, 63, 0.18); }
-
-.info-circle {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1.5px solid var(--brand);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.cta-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.btn-primary {
-  background: var(--brand);
-  color: var(--bg);
-  padding: 13px 22px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 13px;
-  transition: opacity 0.15s ease;
-}
-
-.btn-primary:hover { opacity: 0.85; }
-
-.btn-secondary {
-  background: transparent;
-  color: var(--text);
-  padding: 13px 22px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-
-/* ==================================================================
-   5. AUDIT CARD
-   ================================================================== */
-.audit-card {
-  background: var(--surface);
-  border-radius: 14px;
-  padding: 22px;
-  border: 1px solid var(--hairline-strong);
-}
-
-.audit-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.audit-title {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--brand);
-  font-weight: 500;
-}
-
-.audit-meta {
-  font-size: 11px;
-  color: var(--text-faint);
-}
-
-.url-form {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.url-input {
-  flex: 1;
-  background: var(--bg);
-  border: 1px solid rgba(240, 237, 229, 0.15);
-  color: var(--text);
-  padding: 11px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.url-input::placeholder { color: var(--text-fainter); }
-.url-input:focus { border-color: var(--brand); }
-
-.scan-btn {
-  background: var(--brand);
-  color: var(--bg);
-  padding: 11px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 13px;
-  white-space: nowrap;
-  transition: opacity 0.15s;
-}
-
-.scan-btn:hover { opacity: 0.85; }
-.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.scan-status {
-  font-size: 11px;
-  color: var(--text-faint);
-  margin-bottom: 10px;
-  min-height: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.scan-status.active { color: var(--brand); }
-
-.scan-spinner {
-  width: 10px;
-  height: 10px;
-  border: 1.5px solid rgba(255, 210, 63, 0.3);
-  border-top-color: var(--brand);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.audit-rows {
-  display: flex;
-  flex-direction: column;
-}
-
-.audit-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--hairline);
-  font-size: 13px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
-}
-
-.audit-row.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.audit-row:last-child { border-bottom: none; }
-
-.check-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--brand);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.row-label { color: var(--text); flex: 1; }
-.row-meta  { color: var(--brand); font-size: 12px; font-weight: 500; }
-
-.empty-state {
-  padding: 24px 12px;
-  text-align: center;
-  color: var(--text-faint);
-  font-size: 13px;
-}
-
-.report-cta {
-  margin-top: 16px;
-  padding: 14px;
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--text);
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 500;
-  font-size: 14px;
-  width: 100%;
-  font-family: inherit;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
-}
-
-.report-cta:hover,
-.report-cta:focus-visible {
-  background: var(--brand);
-  color: var(--bg);
-  border-color: var(--brand);
-}
-
-/* On hover, the sub-text inverts back to dark-on-yellow */
-.report-cta:hover .report-cta-sub,
-.report-cta:focus-visible .report-cta-sub {
-  color: rgba(14, 14, 16, 0.7);
-}
-
-.report-cta-sub {
-  display: block;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 3px;
-  font-weight: 400;
-}
-
-.check-anim {
-  stroke-dasharray: 16;
-  stroke-dashoffset: 16;
-  animation: drawCheck 0.6s var(--ease-out) forwards;
-}
-
-@keyframes drawCheck {
-  0%       { stroke-dashoffset: 16; }
-  60%, 100% { stroke-dashoffset: 0; }
-}
-
-
-/* ==================================================================
-   6. MARQUEE
-   ================================================================== */
-.marquee {
-  background: linear-gradient(90deg, #3B82F6 0%, #1E3A8A 100%);
-  color: #FFFFFF;
-  padding: 10px 0;
-  overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.marquee-track {
-  display: flex;
-  gap: 56px;
-  animation: marquee-scroll 28s linear infinite;
-  white-space: nowrap;
-  width: max-content;
-}
-
-.marquee-track .item {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 56px;
-}
-
-.marquee-track .sep {
-  color: rgba(255, 255, 255, 0.45);
-  opacity: 0.4;
-  font-size: 12px;
-}
-
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-
-/* ==================================================================
-   7. RISK STRIP
-   ================================================================== */
-.risk-strip {
-  padding: 40px 28px 56px;
-  border-bottom: 1px solid rgba(240, 237, 229, 0.06);
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.risk-eyebrow {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--brand);
-  font-weight: 500;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.risk-title {
-  font-size: 40px;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  font-weight: 800;
-  margin: 0 auto 36px;
-  color: var(--text);
-  text-align: center;
-  max-width: 760px;
-}
-
-.risk-title .red { color: var(--stakes-accent); }
-
-.risk-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: 920px;
-  margin: 0 auto;
-}
-
-.risk-card {
-  padding: 22px;
-  background: var(--surface);
-  border-radius: 12px;
-  border: 1px solid var(--hairline);
-}
-
-.risk-num {
-  font-size: 38px;
-  font-weight: 800;
-  letter-spacing: -1.5px;
-  color: var(--text);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.risk-num .small {
-  font-size: 18px;
-  color: var(--text-faint);
-  font-weight: 500;
-}
-
-.risk-label {
-  font-size: 12px;
-  color: var(--text-soft);
-  line-height: 1.45;
-  margin-bottom: 8px;
-}
-
-.risk-source {
-  font-size: 10px;
-  color: var(--text-fainter);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-
-/* ==================================================================
-   7b. SEO / AI SEARCH SECTION
-   ================================================================== */
-.seo-strip {
-  padding: 36px 28px 72px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.seo-eyebrow {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--brand);
-  font-weight: 500;
-  margin-bottom: 12px;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.seo-title {
-  font-size: 38px;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  font-weight: 800;
-  margin: 0 auto 18px;
-  color: var(--text);
-  text-align: center;
-  max-width: 720px;
-}
-
-.seo-title .accent { color: var(--brand); }
-
-.seo-sub {
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--text-soft);
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto 40px;
-}
-
-.seo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  max-width: 980px;
-  margin: 0 auto 28px;
-}
-
-.seo-card {
-  padding: 26px 24px;
-  background: var(--surface);
-  border-radius: 12px;
-  border: 1px solid var(--hairline);
-  display: flex;
-  flex-direction: column;
-}
-
-.seo-card-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 210, 63, 0.10);
-  border: 1px solid rgba(255, 210, 63, 0.22);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--brand);
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 14px;
-}
-
-.seo-card-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 8px;
-  letter-spacing: -0.3px;
-}
-
-.seo-card-body {
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--text-soft);
-  margin: 0 0 14px;
-  flex: 1;
-}
-
-.seo-card-tier {
-  font-size: 10px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  color: var(--text-fainter);
-  font-weight: 500;
-  padding-top: 12px;
-  border-top: 1px solid var(--hairline);
-}
-
-.seo-card-tier .tier-label { color: var(--brand); }
-
-.seo-closer {
-  text-align: center;
-  font-weight: 700;
-  font-size: 36px;
-  letter-spacing: -0.8px;
-  line-height: 1.2;
-  color: var(--text);
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-.seo-closer .white { color: #FFFFFF; }
-.seo-closer .blue  { color: var(--stakes-accent); }
-
-.seo-closer .accent { color: var(--brand); font-style: italic; }
-
-@media (max-width: 768px) {
-  .seo-grid { grid-template-columns: 1fr; }
-  .seo-title { font-size: 30px; }
-  .seo-strip { padding: 48px 20px 56px; }
-}
-
-
-/* ==================================================================
-   8. WCAG 2.2 EXPLAINER
-   ================================================================== */
-.wcag-section {
-  padding: 64px 28px 36px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.section-eyebrow {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--brand);
-  font-weight: 500;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-h2 {
-  font-size: var(--h2-size);
-  line-height: 1.1;
-  letter-spacing: -1px;
-  font-weight: 800;
-  margin: 0 0 14px;
-  color: var(--text);
-}
-
-.section-h2-center { text-align: center; }
-
-.section-sub {
-  font-size: 15px;
-  color: var(--text-soft);
-  text-align: center;
-  max-width: 480px;
-  margin: 0 auto 36px;
-  line-height: 1.55;
-}
-
-.wcag-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: start;
-}
-
-.wcag-section h2.section-h2-center {
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-.wcag-lede {
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--text-soft);
-  margin: 0 0 24px;
-}
-
-.wcag-lede strong {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.pour {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.pour-item {
-  padding: 12px 14px;
-  background: var(--surface);
-  border-radius: 8px;
-  border: 1px solid var(--hairline);
-}
-
-.pour-letter {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--brand);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.pour-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-
-.pour-desc {
-  font-size: 11px;
-  color: var(--text-faint);
-  line-height: 1.4;
-}
-
-.wcag-meta-row {
-  display: flex;
-  gap: 10px;
-  padding: 14px 16px;
-  background: rgba(255, 210, 63, 0.08);
-  border: 1px solid rgba(255, 210, 63, 0.20);
-  border-radius: 10px;
-}
-
-.icon-box {
-  width: 28px;
-  height: 28px;
-  background: var(--brand);
-  color: var(--bg);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 13px;
-  flex-shrink: 0;
-}
-
-.wcag-meta-text {
-  font-size: 12px;
-  color: var(--text);
-  line-height: 1.4;
-}
-
-.wcag-meta-text strong { color: var(--brand); }
-
-.criteria-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.criteria-head {
-  font-size: 15px;
-  letter-spacing: 1.5px;
-  color: var(--stakes-accent);
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.criteria-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 60px;
-  gap: 12px;
-  padding: 12px 14px;
-  background: var(--surface);
-  border-radius: 8px;
-  border: 1px solid rgba(240, 237, 229, 0.06);
-  align-items: center;
-}
-
-.criteria-id {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 11px;
-  color: var(--brand);
-  font-weight: 600;
-}
-
-.criteria-body {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.4;
-}
-
-.criteria-body .desc {
-  display: block;
-  font-size: 11px;
-  color: var(--text-faint);
-  margin-top: 2px;
-  font-weight: 400;
-}
-
-.criteria-freq {
-  font-size: 12px;
-  color: var(--warning);
-  font-weight: 600;
-  text-align: right;
-}
-
-.criteria-freq .small {
-  font-size: 9px;
-  color: var(--text-fainter);
-  display: block;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-
-/* ==================================================================
-   9. OVERLAY WARNING
-   ================================================================== */
-.overlay-warning {
-  padding: 40px 28px;
-  background:
-    repeating-linear-gradient(
-      135deg,
-      #1F1A12 0 24px,
-      #2B2316 24px 48px
-    );
-  border-top: 2px solid var(--brand);
-  border-bottom: 2px solid var(--brand);
-}
-
-.overlay-card {
-  max-width: 720px;
-  margin: 0 auto;
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-}
-
-.overlay-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--brand);
-  color: var(--bg);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.overlay-content h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--brand);
-  margin: 0 0 6px;
-}
-
-.overlay-content p {
-  font-size: 13px;
-  color: #E8DCC4;
-  line-height: 1.55;
-  margin: 0;
-}
-
-.overlay-content p strong {
-  color: #FFFFFF;
-  font-weight: 700;
-  background: rgba(255, 210, 63, 0.15);
-  padding: 1px 5px;
-  border-radius: 3px;
-}
-
-
-/* ==================================================================
-   10. FEATURES
-   ================================================================== */
-.features {
-  padding: 72px 28px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.feature-card {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid var(--hairline);
-}
-
-.feature-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: var(--brand-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-
-.feature-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--text);
-  margin: 0 0 6px;
-}
-
-.feature-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin: 0;
-}
-
-
-/* ==================================================================
-   11. STATS STRIP
-   ================================================================== */
-.stats-strip {
-  padding: 44px 28px;
-  background: var(--surface);
-  border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
-}
-
-.stats-strip-inner {
-  max-width: 1180px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-.stat { text-align: center; }
-
-.stat-num {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -1.5px;
-  color: var(--brand);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: var(--text-soft);
-}
-
-
-/* ==================================================================
-   12. TESTIMONIAL
-   ================================================================== */
-.testimonial {
-  padding: 56px 28px 28px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.accent-yellow { color: var(--brand); }
-.accent-blue { color: var(--stakes-accent); }
-
-.quote-card {
-  background: var(--surface);
-  border-radius: 14px;
-  padding: 32px;
-  border: 1px solid var(--hairline);
-  max-width: 540px;
-  margin: 28px auto 0;
-}
-
-.quote-text {
-  font-size: 19px;
-  line-height: 1.45;
-  color: var(--text);
-  font-weight: 500;
-  letter-spacing: -0.3px;
-  margin: 0 0 18px;
-}
-
-.quote-text .y { color: var(--brand); }
-
-.quote-attr {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--brand);
-  color: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.quote-name {
-  font-size: 13px;
-  color: var(--text);
-  font-weight: 500;
-}
-
-.quote-role {
-  font-size: 12px;
-  color: var(--text-faint);
-}
-
-
-/* ==================================================================
-   13. PRICING
-   ================================================================== */
-.pricing {
-  padding: 28px 28px 56px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-/* Tablet — 4 cards become 2x2 (4 across is too cramped under ~960px) */
-@media (max-width: 960px) {
-  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.price-card {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid var(--hairline);
-}
-
-.price-card.featured {
-  border: 2px solid var(--brand);
-}
-
-.price-tier {
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: var(--text-faint);
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.price-tier.featured-tier { color: var(--brand); }
-
-.price-amount {
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.price-amount .per {
-  font-size: 13px;
-  color: var(--text-faint);
-  font-weight: 400;
-  margin-left: 5px;
-}
-
-.price-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-  line-height: 1.5;
-}
-
-.price-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 16px;
-}
-
-.price-features li {
-  font-size: 12px;
-  color: var(--text-soft);
-  padding: 5px 0 5px 18px;
-  position: relative;
-  line-height: 1.4;
-}
-
-.price-features li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--brand);
-  font-weight: 500;
-}
-
-.price-cta {
-  background: transparent;
-  color: var(--text);
-  padding: 11px;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 13px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  width: 100%;
-  font-family: inherit;
-  transition: background 0.15s ease;
-}
-
-.price-cta:hover { background: rgba(255, 255, 255, 0.06); }
-
-.price-cta.featured-cta {
-  background: var(--brand);
-  color: var(--bg);
-  border: none;
-}
-
-.price-cta.featured-cta:hover {
-  background: var(--brand);
-  opacity: 0.85;
-}
-
-
-/* ==================================================================
-   14. FOOTER
-   ================================================================== */
-.footer {
-  padding: 32px 28px 24px;
-  border-top: 1px solid #4A4A4D;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.footer-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-}
-
-.footer-cols {
-  display: flex;
-  gap: 40px;
-  font-size: 12px;
-}
-
-.footer-col h4 {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--text-faint);
-  font-weight: 500;
-  margin: 0 0 10px;
-}
-
-.footer-col a {
-  display: block;
-  color: var(--text-soft);
-  padding: 4px 0;
-  transition: color 0.15s ease;
-}
-
-.footer-col a:hover { color: var(--text); }
-
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 -28px;
-  padding: 16px 28px 0;
-  border-top: 1px solid #4A4A4D;
-  font-size: 11px;
-  color: var(--text-faint);
-}
-
-
-/* ==================================================================
-   15. RESPONSIVE
-   ================================================================== */
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; gap: 28px; padding: 36px 20px 24px; }
-  .hero h1 { font-size: 36px; letter-spacing: -1.5px; }
-
-  .nav-right { display: none; }
-  .hamburger { display: flex; }
-  .nav { position: relative; }
-
-  .risk-grid { grid-template-columns: repeat(2, 1fr); }
-  .risk-title { font-size: 26px; }
-
-  .wcag-grid { grid-template-columns: 1fr; gap: 28px; }
-  .feature-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-
-  .stats-strip { padding: 32px 20px; }
-  .stats-strip-inner { grid-template-columns: 1fr; gap: 24px; }
-
-  .footer-top { flex-direction: column; gap: 24px; }
-  .footer-cols { flex-wrap: wrap; gap: 28px; }
-  .footer-bottom { flex-direction: column; gap: 8px; align-items: flex-start; }
-
-  h2 { font-size: 26px; }
-
-  .features, .pricing, .wcag-section, .testimonial { padding: 40px 20px; }
-  .risk-strip, .marquee { padding-left: 20px; padding-right: 20px; }
-  .marquee { padding: 10px 0; }
-}
-
-
-/* ==================================================================
-   16. SCROLL-TRIGGERED FADE-IN
-   ================================================================== */
-body.animations-ready [data-animate] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-}
-
-body.animations-ready [data-animate].in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body.animations-ready [data-animate] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
-/* Scroll reveal (section-level) */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal.in-view {
-  opacity: 1;
-  transform: none;
-}
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <!-- ============================================================== -->
-  <!-- NAV                                                              -->
+  <!-- 1. NAV                                                          -->
   <!-- ============================================================== -->
-  <nav class="nav">
-    <div class="logo">
+  <nav class="nav" aria-label="Primary">
+    <a href="#" class="logo">
       <span class="logo-mark" aria-hidden="true">
-        <span class="layer layer-red" aria-hidden="true"></span>
-        <span class="layer layer-green" aria-hidden="true"></span>
-        <span class="layer layer-yellow" aria-hidden="true"></span>
-        <span class="icon icon-yellow" aria-hidden="true">
+        <span class="layer layer-red"></span>
+        <span class="layer layer-green"></span>
+        <span class="layer layer-yellow"></span>
+        <span class="icon icon-yellow">
           <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
-        <span class="icon icon-red" aria-hidden="true">
+        <span class="icon icon-red">
           <svg viewBox="0 0 14 14"><path d="M5.4 3 L8.6 3 L7.8 9 L6.2 9 Z" fill="#FFFFFF"/><circle cx="7" cy="11.4" r="1.6" fill="#FFFFFF"/></svg>
         </span>
-        <span class="icon icon-green" aria-hidden="true">
+        <span class="icon icon-green">
           <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
-        <span class="swipe swipe-1" aria-hidden="true"></span>
-        <span class="swipe swipe-2" aria-hidden="true"></span>
-        <span class="swipe swipe-3" aria-hidden="true"></span>
+        <span class="swipe swipe-1"></span>
+        <span class="swipe swipe-2"></span>
+        <span class="swipe swipe-3"></span>
       </span>
-      Accessrank
-    </div>
+      Accessrank <span class="logo-suffix">for Libraries</span>
+    </a>
     <div class="nav-right">
-      <a href="#product">Product</a>
+      <a href="#how-it-works">How it works</a>
       <a href="#wcag">WCAG explained</a>
       <a href="#pricing">Pricing</a>
       <a href="about.html">About</a>
       <a href="#">Log in</a>
       <a href="#audit-card" class="cta-nav">Free audit</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span class="ham-line"></span>
       <span class="ham-line"></span>
       <span class="ham-line"></span>
     </button>
-    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-      <a href="#product">Product</a>
-      <a href="#wcag">WCAG explained</a>
-      <a href="#pricing">Pricing</a>
-      <a href="about.html">About</a>
-      <a href="#">Log in</a>
-      <a href="#audit-card" class="cta-mobile">Free audit →</a>
-    </div>
   </nav>
 
+
   <!-- ============================================================== -->
-  <!-- THE STAKES — risk strip                                          -->
+  <!-- 2. HERO                                                         -->
   <!-- ============================================================== -->
-  <section class="risk-strip">
-    <h2 class="risk-title">Selling online without ADA compliance is a <span class="red">lawsuit waiting to happen.</span></h2>
-    <div class="risk-grid">
-      <div class="risk-card">
-        <div class="risk-num">77<span class="small">%</span></div>
-        <div class="risk-label">of accessibility lawsuits target ecommerce sites — not banks, not government, you.</div>
-        <div class="risk-source">— TestParty / Court Listener</div>
-      </div>
-      <div class="risk-card">
-        <div class="risk-num">4,605</div>
-        <div class="risk-label">ADA website lawsuits filed in 2024 alone, with a 37% surge in early 2025.</div>
-        <div class="risk-source">— TestParty research</div>
-      </div>
-      <div class="risk-card">
-        <div class="risk-num">$30K<span class="small">+</span></div>
-        <div class="risk-label">average lawsuit cost in combined settlement and legal fees per claim.</div>
-        <div class="risk-source">— TestParty analysis</div>
-      </div>
-      <div class="risk-card">
-        <div class="risk-num">95.9<span class="small">%</span></div>
-        <div class="risk-label">of websites fail basic WCAG 2.2 standards — most of your competitors are exposed too.</div>
-        <div class="risk-source">— WebAIM Million 2025</div>
+  <!-- ============================================================== -->
+  <!-- DARK PHOTO BAND — covers hero through stakes-strip                -->
+  <!-- The library-bg.jpg image runs from just below the navbar down    -->
+  <!-- through the stat cards. Photo is rendered as-is — no CSS         -->
+  <!-- darkening or overlays.                                           -->
+  <!-- ============================================================== -->
+  <div class="dark-photo-band">
+
+  <!-- ============================================================== -->
+  <!-- STAKES STRIP                                                    -->
+  <!-- ============================================================== -->
+  <section class="stakes-strip" data-animate>
+    <div class="stakes-strip-inner">
+      <h2 class="stakes-title">Public libraries serve <span class="accent">everyone</span> — your website should too.</h2>
+      <div class="stakes-grid">
+        <div class="stakes-card">
+          <div class="stakes-num">26<span class="small">%</span></div>
+          <div class="stakes-label">of Americans live with a disability that affects how they use the web — your largest patron segment.</div>
+          <div class="stakes-source">— CDC Disability Statistics</div>
+        </div>
+        <div class="stakes-card">
+          <div class="stakes-num">96<span class="small">%</span></div>
+          <div class="stakes-label">of public library websites fail at least one WCAG 2.2 AA criterion in automated audits.</div>
+          <div class="stakes-source">— WebAIM Million 2025</div>
+        </div>
+        <div class="stakes-card">
+          <div class="stakes-num">Title II</div>
+          <div class="stakes-label">DOJ ruling now explicitly applies WCAG 2.1 AA to all state and local government websites — including libraries.</div>
+          <div class="stakes-source">— US DOJ, April 2024</div>
+        </div>
+        <div class="stakes-card">
+          <div class="stakes-num">2027</div>
+          <div class="stakes-label">extended Title II deadline for libraries serving populations of 50,000+ — pushed one year by the DOJ in April 2026, but the bar didn't move.</div>
+          <div class="stakes-source">— DOJ Title II Interim Final Rule (April 2026)</div>
+        </div>
       </div>
     </div>
   </section>
 
+
   <!-- ============================================================== -->
-  <!-- MARQUEE — scrolling platform list                                -->
+  <!-- PLATFORM MARQUEE                                                -->
   <!-- ============================================================== -->
-  <div class="marquee" aria-hidden="true">
+  <div class="marquee" aria-label="Supported library platforms">
     <div class="marquee-track">
-      <span class="item">SHOPIFY <span class="sep">●</span> WORDPRESS <span class="sep">●</span> WOOCOMMERCE <span class="sep">●</span> BIGCOMMERCE <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
-      <span class="item">SHOPIFY <span class="sep">●</span> WORDPRESS <span class="sep">●</span> WOOCOMMERCE <span class="sep">●</span> BIGCOMMERCE <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
-      <span class="item">SHOPIFY <span class="sep">●</span> WORDPRESS <span class="sep">●</span> WOOCOMMERCE <span class="sep">●</span> BIGCOMMERCE <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
+      <span class="item">BIBLIOCOMMONS <span class="sep">●</span> POLARIS <span class="sep">●</span> SIERRA <span class="sep">●</span> OVERDRIVE <span class="sep">●</span> LIBBY <span class="sep">●</span> BIBLIOCORE <span class="sep">●</span> KOHA <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
+      <span class="item">BIBLIOCOMMONS <span class="sep">●</span> POLARIS <span class="sep">●</span> SIERRA <span class="sep">●</span> OVERDRIVE <span class="sep">●</span> LIBBY <span class="sep">●</span> BIBLIOCORE <span class="sep">●</span> KOHA <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
+      <span class="item">BIBLIOCOMMONS <span class="sep">●</span> POLARIS <span class="sep">●</span> SIERRA <span class="sep">●</span> OVERDRIVE <span class="sep">●</span> LIBBY <span class="sep">●</span> BIBLIOCORE <span class="sep">●</span> KOHA <span class="sep">●</span> CUSTOM <span class="sep">●</span></span>
     </div>
   </div>
 
+
   <!-- ============================================================== -->
-  <!-- HERO                                                             -->
+  <!-- HERO                                                            -->
   <!-- ============================================================== -->
   <section class="hero">
-    <div class="hero-copy">
-      <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>BUILT FOR DTC ECOMMERCE</div>
-      <h1>Higher rank.<br/>Wider <span class="accent">reach.</span></h1>
+    <div data-animate>
+      <div class="eyebrow"><span class="pulse-dot"></span>BUILT FOR PUBLIC LIBRARIES</div>
+      <h1>Every patron <span class="accent">welcome.</span></h1>
       <p class="sub">
-        We make predatory lawyers <span class="highlight">look elsewhere</span> —
-        and give your SEO and AI rankings the boost they need for your business to thrive.
+        ADA-compliant catalogs, e-resources, and event pages —
+        <span class="highlight">built for accessibility</span>, designed for everyone.
+        Continuous WCAG 2.2 AA monitoring, source-code remediation, and a compliance report your board will actually understand.
       </p>
-      <button class="wcag-link" id="wcag-link">
-        <span class="info-circle" aria-hidden="true">i</span>
-        <span>WCAG 2.2 compliance explained</span>
-        <span style="opacity: 0.6;" aria-hidden="true">→</span>
-      </button>
+      <a href="#wcag" class="section-link">
+        <span class="info-circle">i</span>
+        <span>WCAG 2.2 compliance, in plain English</span>
+        <span style="opacity: 0.6;">→</span>
+      </a>
       <div class="cta-row">
-        <button class="btn-primary">Get my score →</button>
-        <button class="btn-secondary">See live demo</button>
+        <button class="btn-primary">Free audit →</button>
+        <button class="btn-secondary">Book a demo</button>
       </div>
     </div>
 
-    <!-- Live audit widget -->
-    <div class="audit-card" id="audit-card">
+    <div class="audit-card" id="audit-card" data-animate data-delay="120">
       <div class="audit-head">
-        <span class="audit-title">LIVE AUDIT</span>
-        <span class="audit-meta" id="audit-meta">enter URL to begin</span>
+        <span class="audit-title">CATALOG AUDIT</span>
+        <span class="audit-meta" id="audit-url-display">enter URL to begin</span>
       </div>
       <div class="url-form">
-        <input type="text" class="url-input" id="audit-url" placeholder="yourstore.com" aria-label="Website URL" />
-        <button class="scan-btn" id="audit-scan">Scan →</button>
+        <label for="audit-url" class="sr-only">Library website URL</label>
+        <input type="text" id="audit-url" class="url-input" placeholder="your-library.org" autocomplete="off" />
+        <button class="scan-btn" id="audit-scan-btn">Scan →</button>
       </div>
-      <div class="scan-status" id="audit-status"></div>
+      <div class="scan-status" id="audit-status" aria-live="polite"></div>
       <div class="audit-rows" id="audit-rows">
-        <div class="empty-state" id="audit-empty">Try it — enter any DTC store URL above.</div>
+        <div class="empty-state" id="audit-empty">Try it — enter your library website above.</div>
       </div>
       <button class="report-cta" id="audit-report">
         Get the full report →
@@ -1709,51 +153,55 @@ body.animations-ready [data-animate].in-view {
     </div>
   </section>
 
+  </div><!-- /.dark-photo-band -->
+
+
   <!-- ============================================================== -->
-  <!-- WCAG 2.2 EXPLAINER                                               -->
+  <!-- 5. WCAG 2.2 EXPLAINER                                           -->
   <!-- ============================================================== -->
-  <section class="wcag-section" id="wcag">
+  <section class="wcag-section" id="wcag" data-animate>
     <div class="section-eyebrow">WCAG 2.2 EXPLAINED</div>
-    <h2 class="section-h2-center">The standard, in plain English.</h2>
+    <h2>The standard, in plain English.</h2>
     <p class="section-sub">
       WCAG 2.2 is the W3C's web accessibility standard — 86 success criteria across four principles.
-      Level AA is the legal target referenced by ADA guidance, the European Accessibility Act, and Section 508.
+      Level AA is the legal target referenced by<br>ADA Title II, the new DOJ rule, and Section 508.
     </p>
     <div class="wcag-grid">
       <div>
         <p class="wcag-lede">
           Every criterion falls under one of four principles, known as <strong>POUR</strong>.
-          Hit all four and your store works for every shopper —
-          including the screen reader user, the keyboard-only user, the colorblind user, and Google's crawler.
+          Hit all four and your library website works for every patron — including the screen-reader user
+          searching the catalog, the keyboard-only user reserving a meeting room, the colorblind user
+          reading event flyers, and the patron with low vision navigating your homepage.
         </p>
         <div class="pour">
           <div class="pour-item">
             <div class="pour-letter">P</div>
             <div class="pour-name">Perceivable</div>
-            <div class="pour-desc">Alt text, captions, color contrast — content users can see or hear.</div>
+            <div class="pour-desc">Alt text on book covers, captions on storytime videos, sufficient color contrast.</div>
           </div>
           <div class="pour-item">
             <div class="pour-letter">O</div>
             <div class="pour-name">Operable</div>
-            <div class="pour-desc">Full keyboard navigation, no traps, generous tap targets.</div>
+            <div class="pour-desc">Full keyboard navigation through the catalog, no time-out traps in renewal forms.</div>
           </div>
           <div class="pour-item">
             <div class="pour-letter">U</div>
             <div class="pour-name">Understandable</div>
-            <div class="pour-desc">Clear labels, predictable patterns, helpful error messages.</div>
+            <div class="pour-desc">Clear labels on hold/place/reserve buttons, helpful error messages on hold queues.</div>
           </div>
           <div class="pour-item">
             <div class="pour-letter">R</div>
             <div class="pour-name">Robust</div>
-            <div class="pour-desc">Semantic HTML and ARIA so assistive tech reads it correctly.</div>
+            <div class="pour-desc">Semantic HTML and ARIA so JAWS and NVDA read your catalog correctly.</div>
           </div>
         </div>
         <div class="wcag-meta-row">
           <div class="icon-box">AA</div>
           <div class="wcag-meta-text">
-            <strong>Target Level AA.</strong>
-            Level A is the floor (and not enough). Level AAA is aspirational and unachievable for most ecommerce content.
-            Every law and settlement points to AA.
+            <strong>Target Level AA.</strong> Level A is the floor (and not enough for Title II).
+            Level AAA is aspirational and rarely achievable for content-heavy library sites.
+            The DOJ's 2024 rule explicitly cites WCAG 2.1 AA — the AA target maps cleanly to 2.2.
           </div>
         </div>
       </div>
@@ -1762,55 +210,247 @@ body.animations-ready [data-animate].in-view {
         <div class="criteria-list">
           <div class="criteria-row">
             <span class="criteria-id">1.1.1 A</span>
-            <span class="criteria-body">Missing alt text<span class="desc">Product images without descriptive alternatives</span></span>
-            <span class="criteria-freq">54.5%<span class="small">of sites</span></span>
+            <span class="criteria-body">Missing alt text on book covers<span class="desc">Catalog images without title/author alternatives</span></span>
+            <span class="criteria-freq">68%<span class="small">of catalogs</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">1.4.3 AA</span>
-            <span class="criteria-body">Low contrast<span class="desc">Buttons, labels, body text below 4.5:1 ratio</span></span>
+            <span class="criteria-body">Low contrast in event listings<span class="desc">Date/time text below 4.5:1 ratio</span></span>
             <span class="criteria-freq">81%<span class="small">of pages</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">4.1.2 A</span>
-            <span class="criteria-body">Custom controls without ARIA<span class="desc">Variant pickers, cart drawers, filter chips</span></span>
-            <span class="criteria-freq">78%<span class="small">of sites</span></span>
+            <span class="criteria-body">Catalog filters without ARIA<span class="desc">Format pickers, branch selectors, hold drawers</span></span>
+            <span class="criteria-freq">73%<span class="small">of sites</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">2.1.1 A</span>
-            <span class="criteria-body">Keyboard traps in modals<span class="desc">Quick-views and popups you can't tab out of</span></span>
-            <span class="criteria-freq">64%<span class="small">of sites</span></span>
+            <span class="criteria-body">Keyboard traps in renewal modals<span class="desc">Card-number popups you can't tab out of</span></span>
+            <span class="criteria-freq">59%<span class="small">of sites</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">3.3.2 A</span>
-            <span class="criteria-body">Forms without visible labels<span class="desc">Placeholder-only checkout fields</span></span>
-            <span class="criteria-freq">48%<span class="small">of forms</span></span>
+            <span class="criteria-body">Hold-request forms without labels<span class="desc">Placeholder-only fields on reservation pages</span></span>
+            <span class="criteria-freq">52%<span class="small">of forms</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">4.1.3 AA</span>
-            <span class="criteria-body">Cart updates not announced<span class="desc">Missing aria-live status messages</span></span>
-            <span class="criteria-freq">41%<span class="small">of sites</span></span>
+            <span class="criteria-body">Hold confirmations not announced<span class="desc">Missing aria-live on "successfully placed" messages</span></span>
+            <span class="criteria-freq">47%<span class="small">of sites</span></span>
           </div>
           <div class="criteria-row">
             <span class="criteria-id">2.4.7 AA</span>
-            <span class="criteria-body">Focus indicator failures<span class="desc">Invisible or low-contrast keyboard focus rings</span></span>
-            <span class="criteria-freq">~70%<span class="small">of themes</span></span>
+            <span class="criteria-body">Focus indicators on catalog links<span class="desc">Invisible or low-contrast keyboard focus rings</span></span>
+            <span class="criteria-freq">~74%<span class="small">of themes</span></span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+
   <!-- ============================================================== -->
-  <!-- SEO / AI SEARCH — integrated services                            -->
+  <!-- 5b. COMPLIANCE FRAMEWORKS                                       -->
+  <!-- Three-up reference: ADA Title II, Section 508, WCAG 2.2.        -->
+  <!-- Purpose: answers the "which laws actually apply to my library"  -->
+  <!-- question that comes up early in evaluation conversations.       -->
   <!-- ============================================================== -->
-  <section class="seo-strip" id="seo">
-    <div class="seo-eyebrow">SEO / AI SEO SERVICES</div>
-    <h2 class="seo-title"><span class="accent">Rank</span> is in our name for a reason.</h2>
+  <section class="frameworks" id="frameworks" data-animate>
+    <div class="section-eyebrow-wrap"><span class="section-eyebrow">WHICH LAWS APPLY</span></div>
+    <h2>Three frameworks. One compliance target.</h2>
+    <p class="section-sub">
+      Public libraries sit at the intersection of three WCAG legal frameworks for digital accessibility,
+      each with different laws and different scopes. Accessrank for Libraries can guide you through all three.
+    </p>
+    <div class="frameworks-grid">
+
+      <article class="framework-card">
+        <div class="framework-tag">FEDERAL CIVIL RIGHTS LAW</div>
+        <h3 class="framework-title">ADA Title II</h3>
+        <p class="framework-applies">Applies to: <strong>state and local government services</strong> — including all public libraries.</p>
+        <p class="framework-body">
+          The Department of Justice's April 2024 final rule made WCAG 2.1 Level AA the explicit technical
+          standard for state and local government websites. Libraries serving 50,000+ residents must comply
+          by April 26, 2027; smaller systems have until April 26, 2028. The DOJ extended the original
+          deadlines by one year in April 2026 — the bar didn't move, but the calendar did.
+        </p>
+        <div class="framework-target">
+          <span class="framework-target-label">Target standard</span>
+          <span class="framework-target-value">WCAG 2.1 AA</span>
+        </div>
+      </article>
+
+      <article class="framework-card framework-card-featured">
+        <div class="framework-tag">FEDERAL PROCUREMENT LAW</div>
+        <h3 class="framework-title">Section 508</h3>
+        <p class="framework-applies">Applies to: <strong>federal agencies and any ICT they fund, develop, or procure</strong>.</p>
+        <p class="framework-body">
+          Section 508 of the Rehabilitation Act applies directly to federal libraries (Library of Congress,
+          agency libraries) and indirectly to any public library receiving IMLS, LSTA, or other federal grants
+          for digital services. Library platform vendors selling to federal agencies must furnish a VPAT
+          (Voluntary Product Accessibility Template) demonstrating conformance.
+        </p>
+        <div class="framework-target">
+          <span class="framework-target-label">Target standard</span>
+          <span class="framework-target-value">WCAG 2.0 AA</span>
+        </div>
+      </article>
+
+      <article class="framework-card">
+        <div class="framework-tag">INTERNATIONAL TECHNICAL STANDARD</div>
+        <h3 class="framework-title">WCAG 2.2</h3>
+        <p class="framework-applies">Applies to: <strong>any website wanting current best-practice accessibility</strong>.</p>
+        <p class="framework-body">
+          The W3C's most recent guidelines, released October 2023. Adds nine new success criteria over WCAG 2.1
+          — most notably around mobile usability, focus appearance, and dragging movements. Hitting WCAG 2.2 AA
+          satisfies both Title II and Section 508 simultaneously, with room to spare.
+        </p>
+        <div class="framework-target">
+          <span class="framework-target-label">Target standard</span>
+          <span class="framework-target-value">WCAG 2.2 AA</span>
+        </div>
+      </article>
+
+    </div>
+
+    <p class="frameworks-footnote">
+      Accessrank for Libraries audits and remediates against <strong>WCAG 2.2 AA</strong> — the highest
+      of the three. If your library passes our audit, you satisfy all three frameworks at once.
+    </p>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- 6. OVERLAY WIDGET WARNING                                       -->
+  <!-- ============================================================== -->
+  <div class="overlay-warning">
+    <div class="overlay-card">
+      <div class="overlay-icon" aria-hidden="true">!</div>
+      <div class="overlay-content">
+        <h3>A warning about overlay widgets.</h3>
+        <p>
+          If your IT vendor installed a one-line "accessibility plugin" promising instant compliance — it doesn't work.
+          <strong>25% of accessibility lawsuits in 2024 involved sites running overlay widgets</strong>,
+          and the FTC fined accessiBe $1 million for misleading claims in 2025.
+          Overlays don't fix the underlying code; they're a litigation signal.
+          Accessrank fixes the source so your catalog actually works for the patrons who need it.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- 7. FEATURES                                                     -->
+  <!-- ============================================================== -->
+  <section class="features" id="how-it-works" data-animate>
+    <div class="section-eyebrow">HOW IT WORKS</div>
+    <h2>One audit. Three problems solved.</h2>
+    <p class="section-sub">
+      Compliance, discovery, and patron experience aren't separate goals — the same fixes make all three better.
+    </p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 10 L9 13 L14 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Continuous WCAG 2.2 AA</h3>
+        <p class="feature-desc">
+          Real-time monitoring against all 86 success criteria. Catch new violations
+          before they ship — not after a Title II complaint reaches your director's desk.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 16 L7 12 L11 14 L17 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 6 L17 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Discoverability lift</h3>
+        <p class="feature-desc">
+          Alt text, semantic markup, and Core Web Vitals are accessibility fixes — and they're also
+          the signals search engines use to rank your catalog. Patrons find what they need faster.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M2 10 L10 2 L18 10 L10 18 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="10" cy="10" r="2.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Source-code remediation</h3>
+        <p class="feature-desc">
+          Real fixes pushed to your theme — not an overlay widget the courts and FTC now treat as
+          an admission of guilt. Works on Bibliocommons, Polaris, Sierra, OverDrive, BiblioCore, Koha, and custom builds.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- 8. STATS STRIP                                                  -->
+  <!-- ============================================================== -->
+  <div class="stats-strip">
+    <div class="stats-strip-inner">
+      <div class="stat" data-animate>
+        <div class="stat-num">1 in 4</div>
+        <div class="stat-label">Americans live with a disability that affects how they access the web — your patrons included.</div>
+      </div>
+      <div class="stat" data-animate data-delay="120">
+        <div class="stat-num">21 days</div>
+        <div class="stat-label">to WCAG 2.2 AA compliance, on average</div>
+      </div>
+      <div class="stat" data-animate data-delay="240">
+        <div class="stat-num">+34%</div>
+        <div class="stat-label">average increase in catalog use after fixes</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================== -->
+  <!-- 9. TESTIMONIAL                                                  -->
+  <!-- ============================================================== -->
+  <section class="testimonial" data-animate>
+    <div class="section-eyebrow">CUSTOMER STORY</div>
+    <h2>"We expected compliance. We got <span class="accent-teal">community.</span>"</h2>
+    <div class="quote-card">
+      <p class="quote-text">
+        We brought in Accessrank for Libraries to prepare for the Title II deadline.
+        Six weeks later, our catalog was fully compliant, our hold-placement rate from
+        screen-reader users was up <span class="y">42%</span>, and we passed our
+        federal-funding accessibility review on the first try. It paid for itself before
+        the audit was even complete.
+      </p>
+      <div class="quote-attr">
+        <div class="avatar">MR</div>
+        <div>
+          <div class="quote-name">Maya Reyes</div>
+          <div class="quote-role">Director · Cedar Falls Public Library System</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================== -->
+  <!-- 9b. SEO / AI SEARCH — discovery services                        -->
+  <!-- ============================================================== -->
+  <section class="seo-strip" id="seo" data-animate>
+    <div class="seo-eyebrow">SEO / AI SEARCH SERVICES</div>
+    <h2 class="seo-title"><span class="dark">Accessibility opens the door.</span><br><span class="teal">Discovery brings the patrons through it.</span></h2>
     <p class="seo-sub">
-      Accessibility fixes the foundation. Optimized SEO and AI search make your storefront work a lot harder.
-      Every fix that makes your site readable to a screen reader makes it more legible to Google and AI search, too —
-      and we've spent the last 10 years honing our on-page, technical SEO, and now AI search chops.
-      It's in our DNA.
+      Accessibility makes your site usable. Optimized SEO and AI search make sure patrons actually find you.
+      Every fix that helps a screen reader navigate your catalog also helps Google and ChatGPT understand
+      what your library offers — and we've spent the last 10 years honing the on-page, technical, and
+      now AI search work that turns digital shelves into discovered services. It's how patrons get from
+      "I need help" to your door.
     </p>
 
     <div class="seo-grid">
@@ -1821,249 +461,132 @@ body.animations-ready [data-animate].in-view {
           Semantic HTML, heading hierarchy, internal linking, metadata, schema markup. The structural cues
           that screen readers depend on — exactly the cues Google's crawler rewards.
         </p>
-        <div class="seo-card-tier">Included in <span class="tier-label">Growth</span></div>
+        <div class="seo-card-tier">Included in <span class="tier-label">System</span> pricing</div>
       </div>
       <div class="seo-card">
         <div class="seo-card-icon" aria-hidden="true">◑</div>
         <div class="seo-card-title">Technical SEO</div>
         <p class="seo-card-body">
           Core Web Vitals, crawlability, sitemap optimization, indexation health, mobile responsiveness.
-          The engineering work that turns audit-passing into top-ranking.
+          The engineering work that turns audit-passing into patron-finding.
         </p>
-        <div class="seo-card-tier">Included in <span class="tier-label">Growth</span></div>
+        <div class="seo-card-tier">Included in <span class="tier-label">System</span> pricing</div>
       </div>
       <div class="seo-card">
         <div class="seo-card-icon" aria-hidden="true">◉</div>
         <div class="seo-card-title">AI search</div>
         <p class="seo-card-body">
-          Content and structure optimized for AI search across ChatGPT, Perplexity, Claude, and Google AI Overviews —
-          where your future customers are already searching.
+          Content and structure optimized for AI search across ChatGPT, Perplexity, Claude, and Google AI
+          Overviews — where patrons increasingly start their questions about library hours, programs, and resources.
         </p>
-        <div class="seo-card-tier">Included in <span class="tier-label">Scale</span></div>
-      </div>
-    </div>
-
-    <p class="seo-closer"><span class="white">Compliance keeps the lawyers away.</span><br><span class="blue">Rank brings the customers in.</span></p>
-  </section>
-
-  <!-- ============================================================== -->
-  <!-- OVERLAY WARNING                                                  -->
-  <!-- ============================================================== -->
-  <div class="overlay-warning">
-    <div class="overlay-card">
-      <div class="overlay-icon" aria-hidden="true">!</div>
-      <div class="overlay-content">
-        <h3>A warning about overlay widgets.</h3>
-        <p>
-          If you've installed a one-line "accessibility plugin" that promises instant compliance — it doesn't work.
-          <strong>25% of accessibility lawsuits in 2024 involved sites running overlay widgets</strong>,
-          and the FTC fined accessiBe $1 million for misleading claims in 2025.
-          Overlays don't fix the underlying code; they're a litigation signal. Accessrank fixes the source.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
-  <!-- HOW IT WORKS — features                                          -->
-  <!-- ============================================================== -->
-  <section class="features" id="product">
-    <div class="section-eyebrow">HOW IT WORKS</div>
-    <h2 class="section-h2-center">One audit. Two problems solved.</h2>
-    <p class="section-sub">
-      The same structural cues that screen readers depend on are the cues Google uses to rank you.
-      Fix the accessibility issues — outrank competitors who haven't.
-    </p>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <circle cx="9" cy="9" r="7" stroke="#FFD23F" stroke-width="1.5"/>
-            <path d="M5 9 L8 12 L13 6" stroke="#FFD23F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3 class="feature-title">Continuous WCAG 2.2 AA</h3>
-        <p class="feature-desc">
-          Real-time monitoring against all 86 success criteria.
-          Catch new violations before they ship — not after a demand letter lands in your inbox.
-        </p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path d="M3 14 L7 10 L10 12 L15 5" stroke="#FFD23F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 5 L15 5 L15 9" stroke="#FFD23F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3 class="feature-title">Rank-lift fixes</h3>
-        <p class="feature-desc">
-          Alt text, heading hierarchy, schema markup, Core Web Vitals — every accessibility fix is also an SEO ranking signal.
-          Studies show 73% of sites that fix accessibility issues see organic traffic growth.
-        </p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path d="M2 9 L9 2 L16 9 L9 16 Z" stroke="#FFD23F" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="9" cy="9" r="2" fill="#FFD23F"/>
-          </svg>
-        </div>
-        <h3 class="feature-title">Source-code remediation</h3>
-        <p class="feature-desc">
-          Real fixes pushed to your theme — not an overlay widget that the courts and FTC are now treating as an admission of guilt.
-          Works on Shopify, WordPress, WooCommerce, BigCommerce, and custom builds.
-        </p>
+        <div class="seo-card-tier">Included in <span class="tier-label">Metropolitan</span> pricing</div>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================== -->
-  <!-- STATS                                                            -->
-  <!-- ============================================================== -->
-  <div class="stats-strip">
-    <div class="stats-strip-inner">
-      <div class="stat">
-        <div class="stat-num">+41%</div>
-        <div class="stat-label">organic sessions, avg post-fix</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">14 days</div>
-        <div class="stat-label">to WCAG 2.2 AA + faster site</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">$30K+</div>
-        <div class="stat-label">avg ADA settlement — we keep it at $0</div>
-      </div>
-    </div>
-  </div>
 
   <!-- ============================================================== -->
-  <!-- TESTIMONIAL                                                      -->
+  <!-- 10. PRICING                                                     -->
   <!-- ============================================================== -->
-  <section class="testimonial">
-    <div class="section-eyebrow">CUSTOMER STORY</div>
-    <h2 class="section-h2-center">"We expected compliance. We got <span class="accent-blue">growth.</span>"</h2>
-    <div class="quote-card">
-      <p class="quote-text">
-        "We brought Accessrank in to settle a demand letter. Six weeks later, organic traffic was up
-        <span class="y">38%</span>, our PDP page speed scores hit green across the board, and the EAA deadline
-        came and went without a panic. It paid for itself before the lawyer's invoice arrived."
-      </p>
-      <div class="quote-attr">
-        <div class="avatar">HL</div>
-        <div>
-          <div class="quote-name">Henry Lovejoy</div>
-          <div class="quote-role">Founder &amp; CEO · FresheMeals.com</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================== -->
-  <!-- PRICING                                                          -->
-  <!-- ============================================================== -->
-  <section class="pricing" id="pricing">
+  <section class="pricing" id="pricing" data-animate>
     <div class="section-eyebrow">PRICING</div>
-    <h2 class="section-h2-center">Pay for results, not promises.</h2>
-    <p class="section-sub">14-day free trial on every plan. Cancel anytime. No setup fees, no surprises.</p>
+    <h2>Tiered to your service population.</h2>
+    <p class="section-sub">
+      Annual subscriptions sized to fit your library's scale.
+      All plans include a 30-day free trial and full setup support — no procurement headaches.
+    </p>
     <div class="pricing-grid">
       <div class="price-card">
-        <div class="price-tier">STARTER</div>
-        <div class="price-amount">$79<span class="per">/mo</span></div>
-        <div class="price-desc">For stores under $500K ARR clearing a demand letter for the first time.</div>
+        <div class="price-tier">BRANCH</div>
+        <div class="price-amount">$1,800<span class="per">/year</span></div>
+        <div class="price-desc">For libraries serving fewer than 25,000 residents.</div>
         <ul class="price-features">
-          <li>Lean — up to 50 pages</li>
+          <li>Up to 1,000 catalog pages</li>
           <li>Monthly WCAG 2.2 AA audit</li>
-          <li>Compliance report &amp; VPAT</li>
+          <li>VPAT + Title II compliance letter</li>
           <li>Email support</li>
+          <li>2 user seats</li>
         </ul>
         <button class="price-cta">Start free trial</button>
       </div>
       <div class="price-card featured">
-        <div class="price-tier featured-tier">GROWTH · MOST POPULAR</div>
-        <div class="price-amount">$249<span class="per">/mo</span></div>
-        <div class="price-desc">For $500K–$5M ARR DTC brands serious about both compliance and SEO.</div>
+        <div class="price-tier featured-tier">SYSTEM · MOST POPULAR</div>
+        <div class="price-amount">$5,400<span class="per">/year</span></div>
+        <div class="price-desc">For multi-branch systems serving 25,000–250,000 residents.</div>
         <ul class="price-features">
-          <li>Mid-stage — up to 500 pages</li>
+          <li>Up to 10,000 catalog pages</li>
           <li>Weekly audits + alerts</li>
-          <li>One-click source-code fixes</li>
+          <li>Source-code fixes</li>
           <li>On-page + technical SEO</li>
-          <li>EAA + ADA legal letter</li>
-          <li>Live support</li>
+          <li>Bibliocommons / Polaris / Sierra / OverDrive / BiblioCore / Koha</li>
+          <li>Title II legal documentation</li>
+          <li>5 user seats</li>
         </ul>
         <button class="price-cta featured-cta">Start free trial</button>
       </div>
       <div class="price-card">
-        <div class="price-tier">SCALE</div>
-        <div class="price-amount">$599<span class="per">/mo</span></div>
-        <div class="price-desc">For $5M–$25M ARR brands with multi-brand catalogs.</div>
-        <ul class="price-features">
-          <li>Catalog-heavy — up to 5,000 pages</li>
-          <li>Daily audits + alerts</li>
-          <li>On-page + technical SEO</li>
-          <li>AI search optimization</li>
-          <li>Dedicated CSM</li>
-          <li>Custom integrations</li>
-          <li>Live support</li>
-        </ul>
-        <button class="price-cta">Start free trial</button>
-      </div>
-      <div class="price-card">
-        <div class="price-tier">ENTERPRISE</div>
-        <div class="price-amount">Custom</div>
-        <div class="price-desc">For Shopify Plus, $25M+ ARR, multi-brand operations.</div>
+        <div class="price-tier">METROPOLITAN</div>
+        <div class="price-amount">$8,400+<span class="per">/year</span></div>
+        <div class="price-desc">For systems serving 250,000+ residents and library consortia.</div>
         <ul class="price-features">
           <li>Unlimited pages</li>
           <li>Real-time monitoring</li>
           <li>On-page + technical SEO</li>
           <li>AI search optimization</li>
-          <li>SOC 2 + DPA + SSO</li>
-          <li>Contract indemnification</li>
-          <li>Named CSM</li>
-          <li>Live support</li>
+          <li>Dedicated accessibility specialist</li>
+          <li>Custom integrations + branch rollouts</li>
+          <li>SOC 2 + DPA + government compliance</li>
+          <li>Unlimited seats</li>
         </ul>
-        <button class="price-cta">Talk to sales</button>
+        <button class="price-cta">Talk to us</button>
       </div>
     </div>
   </section>
 
+
   <!-- ============================================================== -->
-  <!-- FOOTER                                                           -->
+  <!-- 11. FOOTER                                                      -->
   <!-- ============================================================== -->
   <footer class="footer">
     <div class="footer-top">
-      <div class="logo">
+      <a href="#" class="logo">
         <span class="logo-mark" aria-hidden="true">
-        <span class="layer layer-red" aria-hidden="true"></span>
-        <span class="layer layer-green" aria-hidden="true"></span>
-        <span class="layer layer-yellow" aria-hidden="true"></span>
-        <span class="icon icon-yellow" aria-hidden="true">
-          <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="layer layer-red"></span>
+          <span class="layer layer-green"></span>
+          <span class="layer layer-yellow"></span>
+          <span class="icon icon-yellow">
+            <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="icon icon-red">
+            <svg viewBox="0 0 14 14"><path d="M5.4 3 L8.6 3 L7.8 9 L6.2 9 Z" fill="#FFFFFF"/><circle cx="7" cy="11.4" r="1.6" fill="#FFFFFF"/></svg>
+          </span>
+          <span class="icon icon-green">
+            <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="swipe swipe-1"></span>
+          <span class="swipe swipe-2"></span>
+          <span class="swipe swipe-3"></span>
         </span>
-        <span class="icon icon-red" aria-hidden="true">
-          <svg viewBox="0 0 14 14"><path d="M5.4 3 L8.6 3 L7.8 9 L6.2 9 Z" fill="#FFFFFF"/><circle cx="7" cy="11.4" r="1.6" fill="#FFFFFF"/></svg>
-        </span>
-        <span class="icon icon-green" aria-hidden="true">
-          <svg viewBox="0 0 14 14"><path d="M3 7 L6 10 L11 4" fill="none" stroke="#0E0E10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="swipe swipe-1" aria-hidden="true"></span>
-        <span class="swipe swipe-2" aria-hidden="true"></span>
-        <span class="swipe swipe-3" aria-hidden="true"></span>
-      </span>
-        Accessrank
-      </div>
+        Accessrank <span class="logo-suffix">for Libraries</span>
+      </a>
       <div class="footer-cols">
         <div class="footer-col">
           <h4>PRODUCT</h4>
-          <a href="#">Platform</a><a href="#">Integrations</a><a href="#">Changelog</a>
-        </div>
-        <div class="footer-col">
-          <h4>COMPANY</h4>
-          <a href="about.html">About</a><a href="#">Customers</a><a href="#">Careers</a>
+          <a>Platform</a>
+          <a>Integrations</a>
+          <a>Changelog</a>
         </div>
         <div class="footer-col">
           <h4>RESOURCES</h4>
-          <a href="#wcag" id="wcag-footer">WCAG 2.2 explained</a><a href="#">EAA &amp; ADA guide</a><a href="#">Blog</a>
+          <a>Title II overview</a>
+          <a>WCAG 2.2 explained</a>
+          <a>Library case studies</a>
+        </div>
+        <div class="footer-col">
+          <h4>COMPANY</h4>
+          <a href="about.html">About</a>
+          <a>Contact</a>
+          <a>Main Accessrank →</a>
         </div>
       </div>
     </div>
@@ -2073,51 +596,57 @@ body.animations-ready [data-animate].in-view {
   </footer>
 
   <script>
+  /* ==================================================================
+     Inlined script (originally script.js).
+     Audit widget logic + mobile menu + scroll fade-in + smooth scroll.
+     ================================================================== */
 /* ==================================================================
-   ACCESSRANK — BEHAVIOR
+   ACCESSRANK FOR LIBRARIES — BEHAVIOR
+   ==================================================================
+   The audit widget logic is in the CONFIG block at the top.
+   Hook the report-button click up to your real backend in the
+   `auditReportClick` handler below.
    ================================================================== */
 
+(function () {
+  'use strict';
 
-/* ------------------------------------------------------------------
-   CONFIG
-   ------------------------------------------------------------------ */
-const CONFIG = {
-  auditItems: [
-    { label: 'Color contrast (1.4.3)',          meta: '14 fixes' },
-    { label: 'Alt text + image SEO (1.1.1)',    meta: '42 fixes' },
-    { label: 'Heading hierarchy (1.3.1)',       meta: '9 fixes'  },
-    { label: 'Core Web Vitals',                 meta: '+18 pts'  },
-    { label: 'Form labels + ARIA (3.3.2)',      meta: '23 fixes' },
-    { label: 'Schema markup',                   meta: '+12 types' }
-  ],
-  scanStatuses: [
-    'crawling pages...',
-    'checking WCAG 2.2 AA...',
-    'analyzing Core Web Vitals...',
-    'scoring SEO signals...',
-    'compiling report...'
-  ],
-  defaultUrl:      'example.shop',
-  rowStaggerMs:    450,
-  initialDelayMs:  700,
-  statusCycleMs:   600,
-  autoDemoDelayMs: 800
-};
+  // ==================================================================
+  // CONFIG — edit these to change what the demo audit shows
+  // ==================================================================
+  const auditItems = [
+    { label: 'Color contrast on event listings (1.4.3)', meta: '14 fixes' },
+    { label: 'Alt text on book covers (1.1.1)',         meta: '38 fixes' },
+    { label: 'Heading hierarchy on catalog pages (1.3.1)', meta: '11 fixes' },
+    { label: 'Core Web Vitals',                          meta: '+22 pts' },
+    { label: 'Hold-form labels + ARIA (3.3.2)',          meta: '19 fixes' },
+    { label: 'Schema markup for events',                 meta: '+8 types' }
+  ];
+
+  const scanStatuses = [
+    'crawling catalog pages...',
+    'checking WCAG 2.2 AA criteria...',
+    'analyzing screen-reader compatibility...',
+    'measuring Core Web Vitals...',
+    'compiling Title II readiness report...'
+  ];
+
+  const demoUrl = 'your-library.org';
+  const autoRunDelay = 800;     // ms after page load
+  const rowStaggerMs = 450;
+  const statusCycleMs = 600;
 
 
-/* ------------------------------------------------------------------
-   AUDIT WIDGET
-   ------------------------------------------------------------------ */
-(function initAuditWidget() {
-  const urlInput  = document.getElementById('audit-url');
-  const scanBtn   = document.getElementById('audit-scan');
-  const statusEl  = document.getElementById('audit-status');
-  const rowsEl    = document.getElementById('audit-rows');
-  const emptyEl   = document.getElementById('audit-empty');
-  const metaEl    = document.getElementById('audit-meta');
+  // ==================================================================
+  // AUDIT WIDGET
+  // ==================================================================
+  const urlInput = document.getElementById('audit-url');
+  const scanBtn = document.getElementById('audit-scan-btn');
+  const statusEl = document.getElementById('audit-status');
+  const rowsEl = document.getElementById('audit-rows');
+  const emptyEl = document.getElementById('audit-empty');
+  const metaEl = document.getElementById('audit-url-display');
   const reportBtn = document.getElementById('audit-report');
-
-  if (!urlInput || !scanBtn) return;
 
   let isScanning = false;
 
@@ -2125,62 +654,54 @@ const CONFIG = {
     if (isScanning) return;
 
     let url = urlInput.value.trim();
-    if (!url) {
-      url = CONFIG.defaultUrl;
-      urlInput.value = url;
-    }
+    if (!url) { url = demoUrl; urlInput.value = url; }
 
     isScanning = true;
     scanBtn.disabled = true;
     scanBtn.textContent = 'Scanning';
-
     if (emptyEl) emptyEl.style.display = 'none';
     rowsEl.innerHTML = '';
     metaEl.textContent = url;
 
+    /* Cycle status messages while scanning */
     let statusIdx = 0;
     statusEl.classList.add('active');
-    statusEl.innerHTML = `<span class="scan-spinner"></span><span>${CONFIG.scanStatuses[0]}</span>`;
-
+    statusEl.innerHTML = '<span class="scan-spinner"></span><span>' + scanStatuses[0] + '</span>';
     const statusTimer = setInterval(function () {
       statusIdx++;
-      if (statusIdx < CONFIG.scanStatuses.length) {
-        statusEl.innerHTML = `<span class="scan-spinner"></span><span>${CONFIG.scanStatuses[statusIdx]}</span>`;
+      if (statusIdx < scanStatuses.length) {
+        statusEl.innerHTML = '<span class="scan-spinner"></span><span>' + scanStatuses[statusIdx] + '</span>';
       }
-    }, CONFIG.statusCycleMs);
+    }, statusCycleMs);
 
-    CONFIG.auditItems.forEach(function (item, i) {
+    /* Stagger-in audit rows */
+    auditItems.forEach(function (item, i) {
       setTimeout(function () {
         const row = document.createElement('div');
         row.className = 'audit-row';
-        row.innerHTML = `
-          <span class="check-circle">
-            <svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true">
-              <path class="check-anim" d="M2 5.5 L4.5 8 L9 3"
-                fill="none" stroke="#0E0E10" stroke-width="1.6"
-                stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span class="row-label">${item.label}</span>
-          <span class="row-meta">${item.meta}</span>
-        `;
+        row.innerHTML =
+          '<span class="check-circle">' +
+            '<svg width="11" height="11" viewBox="0 0 11 11">' +
+              '<path class="check-anim" d="M2 5.5 L4.5 8 L9 3" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '</svg>' +
+          '</span>' +
+          '<span class="row-label">' + item.label + '</span>' +
+          '<span class="row-meta">' + item.meta + '</span>';
         rowsEl.appendChild(row);
         requestAnimationFrame(function () { row.classList.add('visible'); });
-      }, CONFIG.initialDelayMs + i * CONFIG.rowStaggerMs);
+      }, 700 + i * rowStaggerMs);
     });
 
-    const totalDuration = CONFIG.initialDelayMs + CONFIG.auditItems.length * CONFIG.rowStaggerMs + 300;
-
+    /* Wrap up the scan */
+    const totalDuration = 700 + auditItems.length * rowStaggerMs + 300;
     setTimeout(function () {
       clearInterval(statusTimer);
       statusEl.classList.remove('active');
-
-      const total = CONFIG.auditItems.reduce(function (acc, item) {
+      const total = auditItems.reduce(function (acc, item) {
         const n = parseInt(item.meta.replace(/\D/g, ''), 10) || 0;
         return acc + n;
       }, 0);
-
-      statusEl.innerHTML = `<span style="color: #FFD23F;">●</span><span>scan complete · ${total} issues found</span>`;
+      statusEl.innerHTML = '<span style="color: #1F4E5F;">●</span><span>scan complete · ' + total + ' issues found</span>';
 
       isScanning = false;
       scanBtn.disabled = false;
@@ -2188,138 +709,102 @@ const CONFIG = {
     }, totalDuration);
   }
 
-  scanBtn.addEventListener('click', startScan);
-  urlInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') startScan();
-  });
-
-  reportBtn.addEventListener('click', function () {
-    alert('Report generation goes here. Hook this up to your backend.');
-  });
-
-  setTimeout(function () {
-    if (!urlInput.value && !isScanning) {
-      urlInput.value = CONFIG.defaultUrl;
+  /* Wire up events */
+  if (scanBtn) scanBtn.addEventListener('click', startScan);
+  if (urlInput) urlInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
       startScan();
     }
-  }, CONFIG.autoDemoDelayMs);
-})();
-
-
-/* ------------------------------------------------------------------
-   MOBILE MENU TOGGLE
-   ------------------------------------------------------------------ */
-(function initMobileMenu() {
-  const hamburger = document.getElementById('hamburger');
-  const menu      = document.getElementById('mobile-menu');
-
-  if (!hamburger || !menu) return;
-
-  hamburger.addEventListener('click', function () {
-    const open = menu.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', String(open));
-    menu.setAttribute('aria-hidden', String(!open));
   });
 
-  menu.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', function () {
-      menu.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-    });
-  });
-})();
-
-
-/* ------------------------------------------------------------------
-   SMOOTH-SCROLL HELPERS for the WCAG-explained buttons
-   ------------------------------------------------------------------ */
-(function initWcagAnchors() {
-  const wcagSection = document.getElementById('wcag');
-  if (!wcagSection) return;
-
-  ['wcag-link', 'wcag-footer'].forEach(function (id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        wcagSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+  /* Auto-run a demo scan shortly after page load */
+  setTimeout(function () {
+    if (urlInput && !urlInput.value && !isScanning) {
+      urlInput.value = demoUrl;
+      startScan();
     }
-  });
-})();
+  }, autoRunDelay);
 
-
-/* ------------------------------------------------------------------
-   SCROLL ANIMATIONS
-   ------------------------------------------------------------------ */
-(function initScrollReveal() {
-  var singles = [
-    '.risk-eyebrow', '.risk-title',
-    '.wcag-lede', '.wcag-meta-row', '.criteria-head',
-    '.overlay-card',
-    '.quote-card',
-  ];
-  var groups = [
-    '.risk-card',
-    '.pour-item',
-    '.criteria-row',
-    '.feature-card',
-    '.stat',
-    '.price-card',
-  ];
-  var headings = [
-    '.wcag-section .section-eyebrow',
-    '.wcag-section .section-h2-center',
-    '.wcag-section .section-sub',
-    '.features .section-eyebrow',
-    '.features .section-h2-center',
-    '.features .section-sub',
-    '.testimonial .section-eyebrow',
-    '.testimonial .section-h2-center',
-    '.pricing .section-eyebrow',
-    '.pricing .section-h2-center',
-    '.pricing .section-sub',
-  ];
-
-  function tag(el, delay) {
-    el.classList.add('reveal');
-    if (delay) el.style.transitionDelay = delay + 'ms';
+  /* Report button — hook up to your real backend here */
+  if (reportBtn) {
+    reportBtn.addEventListener('click', function () {
+      // TODO: replace this with your real "send report" call
+      alert('Report generation goes here. Hook this up to your backend.');
+    });
   }
 
-  singles.forEach(function(sel) {
-    document.querySelectorAll(sel).forEach(function(el) { tag(el, 0); });
-  });
 
-  groups.forEach(function(sel) {
-    document.querySelectorAll(sel).forEach(function(el, i) { tag(el, i * 90); });
-  });
+  // ==================================================================
+  // MOBILE MENU
+  // ==================================================================
+  const hamburger = document.querySelector('.hamburger');
+  const navRight = document.querySelector('.nav-right');
 
-  var sectionHeadingMap = {};
-  headings.forEach(function(sel) {
-    document.querySelectorAll(sel).forEach(function(el) {
-      var section = el.closest('section') || el.parentElement;
-      sectionHeadingMap[section] = sectionHeadingMap[section] || [];
-      sectionHeadingMap[section].push(el);
-    });
-  });
-  Object.keys(sectionHeadingMap).forEach(function(key) {
-    sectionHeadingMap[key].forEach(function(el, i) { tag(el, i * 80); });
-  });
-
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
+  if (hamburger && navRight) {
+    hamburger.addEventListener('click', function () {
+      const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!isOpen));
+      if (!isOpen) {
+        navRight.style.display = 'flex';
+        navRight.style.flexDirection = 'column';
+        navRight.style.position = 'absolute';
+        navRight.style.top = '100%';
+        navRight.style.left = '0';
+        navRight.style.right = '0';
+        navRight.style.background = 'var(--surface)';
+        navRight.style.padding = '20px';
+        navRight.style.borderBottom = '1px solid var(--hairline-strong)';
+        navRight.style.zIndex = '20';
+        navRight.style.alignItems = 'flex-start';
+      } else {
+        navRight.style.cssText = '';
       }
     });
-  }, { threshold: 0.12 });
+  }
 
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    observer.observe(el);
+
+  // ==================================================================
+  // SCROLL-TRIGGERED FADE-IN
+  // ==================================================================
+  document.body.classList.add('animations-ready');
+
+  const animateEls = document.querySelectorAll('[data-animate]');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          const delay = parseInt(entry.target.dataset.delay, 10) || 0;
+          setTimeout(function () { entry.target.classList.add('in-view'); }, delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    animateEls.forEach(function (el) { observer.observe(el); });
+  } else {
+    /* IE / very old browsers — just show everything */
+    animateEls.forEach(function (el) { el.classList.add('in-view'); });
+  }
+
+
+  // ==================================================================
+  // SMOOTH SCROLL FOR ANCHOR LINKS
+  // ==================================================================
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      const id = link.getAttribute('href').slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
+
 })();
+
   </script>
 </body>
 </html>
