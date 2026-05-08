@@ -53,6 +53,20 @@
       text-align: center;
     }
     .about-hero h1 .accent { color: var(--teal); }
+    .about-hero h1 .emphasis {
+      display: inline-block;
+      font-style: italic;
+      transform-origin: center center;
+      animation: emphasis-swell 1000ms ease-in-out 800ms 1 both;
+    }
+    @keyframes emphasis-swell {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.10); }
+      100% { transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .about-hero h1 .emphasis { animation: none; }
+    }
     .about-hero .lead {
       font-size: 17px;
       line-height: 1.6;
@@ -418,7 +432,7 @@
   <!-- ============================================================== -->
   <section class="about-hero">
     <div class="eyebrow"><span class="dot"></span>ORIGIN STORY</div>
-    <h1>Welcome every patron<br><span class="accent">— and attract even more.</span></h1>
+    <h1>Welcome <span class="emphasis">every</span> patron<br><span class="accent">— and attract even more.</span></h1>
     <p class="lead">
       JP Lincoln, the founder of Crier Communications — a Los Angeles public relations, social media, and website development agency — has worked with a Lima, Peru-based software and SEO development team led by Carlos Maruffo for nearly two decades. When one of Crier's clients got hit with a predatory compliance lawsuit, Carlos and his team sprang into action, pushing that client's accessibility score high enough to discourage any future lawyers from looking their way again.
     </p>
